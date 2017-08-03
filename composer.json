@@ -1,7 +1,7 @@
 {
     "name": "jjonline/php-helper",
     "description": "Call Together Common PHP Functions And Librarys.",
-    "keywords": ["function","classs","Library"],
+    "keywords": ["function","class","library"],
     "homepage": "https://github.com/jjonline/php-helper",
     "authors": [
         {
