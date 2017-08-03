@@ -1,0 +1,26 @@
+{
+    "name": "jjonline/php-helper",
+    "description": "Call Together Common PHP Functions And Librarys.",
+    "keywords": ["function","classs","Library"],
+    "homepage": "https://github.com/jjonline/php-helper",
+    "authors": [
+        {
+            "name": "Jea杨",
+            "email": "jjonline@jjonline.cn",
+            "homepage": "http://blog.jjonline.cn/"
+        }
+    ],
+    "license": "GPL-3.0",
+    "require": {
+        "php": ">=5.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "jjonline\\": "src/library"
+        },
+        "files": [
+            "src/function/CommonFunction.php",
+            "src/function/FilterValid.php"
+        ]
+    }
+}
