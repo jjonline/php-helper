@@ -90,7 +90,8 @@ class FilterValid {
      */
     public static function is_password_valid($password, $minLength = 6, $maxLength = 18)
     {
-        if(strlen($password) > $maxLength || strlen($password) < $minLength) {
+        if(strlen($password) > $maxLength || strlen($password) < $minLength)
+        {
             return false;
         }
         return preg_match('/\d{1,'.$maxLength.'}/',$password) === 1 && preg_match('/[a-zA-Z]{1,'.$maxLength.'}/',$password) === 1;
@@ -222,7 +223,7 @@ class FilterValid {
         $BirthMonth = substr($id, 10, 2);
         $BirthDay   = substr($id, 12, 2);
         $Sex        = substr($id, 16,1) % 2 ;//男1 女0
-        # 
+        # 省份数据
         if(!isset($oProvice[$Provice]))
         {
             return false;
