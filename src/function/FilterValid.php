@@ -113,7 +113,7 @@ class FilterValid {
      */
     public static function is_utf8($str)
     {
-        $c    = 0; 
+        $c    = 0;
         $b    = 0;
         $bits = 0;
         $len  = strlen($str);
@@ -138,5 +138,107 @@ class FilterValid {
             }
         }
         return true;
+    }
+
+    /**
+     * 检测传入的变量是否为一个合法的天朝身份证号（15位、18位兼容）
+     * @param  mixed $citizen_id
+     * @return false|[]
+     */
+    public static function is_citizen_id_valid($citizen_id)
+    {
+        $id                 =   strtoupper($citizen_id);
+        if(!(preg_match('/^\d{17}(\d|X)$/',$id) || preg_match('/^\d{15}$/',$id)))
+        {
+            return false;
+        }
+        # 15位老号码转换为18位
+        $Wi                 =   array(7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2, 1); 
+        $Ai                 =   array('1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2'); 
+        $cardNoSum          =   0;
+        if(strlen($id)==16)
+        {
+            $id             =   substr(0, 6).'19'.substr(6, 9); 
+            for($i = 0; $i < 17; $i++) {
+                $cardNoSum +=   substr($id,$i,1) * $Wi[$i];
+            }  
+            $seq            =   $cardNoSum % 11; 
+            $id             =   $id.$Ai[$seq];
+        }
+        # 效验18位身份证最后一位字符的合法性
+        $cardNoSum          =   0;
+        $id17               =   substr($id,0,17);
+        $lastString         =   substr($id,17,1);
+        for($i = 0; $i < 17; $i++)
+        {
+            $cardNoSum     +=   substr($id,$i,1) * $Wi[$i];
+        }  
+        $seq                =   $cardNoSum % 11;
+        $realString         =   $Ai[$seq];
+        # 最后一位效验失败 不是合法身份证号
+        if($lastString     !=   $realString) {
+            return false;
+        }
+        # 地域仅能精确到省、自治区信息，再往下就需大量数据支撑才能精确
+        $oProvice   = array(
+                11 => "北京",
+                12 => "天津",
+                13 => "河北",
+                14 => "山西",
+                15 => "内蒙古",
+                21 => "辽宁",
+                22 => "吉林",
+                23 => "黑龙江",
+                31 => "上海",
+                32 => "江苏",
+                33 => "浙江",
+                34 => "安徽",
+                35 => "福建",
+                36 => "江西",
+                37 => "山东",
+                41 => "河南",
+                42 => "湖北 ",
+                43 => "湖南",
+                44 => "广东",
+                45 => "广西",
+                46 => "海南",
+                50 => "重庆",
+                51 => "四川",
+                52 => "贵州",
+                53 => "云南",
+                54 => "西藏",
+                61 => "陕西",
+                62 => "甘肃",
+                63 => "青海",
+                64 => "宁夏",
+                65 => "新疆",
+                71 => "台湾",
+                81 => "香港",
+                82 => "澳门",
+                91 => "国外"
+        );
+        $Provice    = substr($id, 0, 2);
+        $BirthYear  = substr($id, 6, 4);
+        $BirthMonth = substr($id, 10, 2);
+        $BirthDay   = substr($id, 12, 2);
+        $Sex        = substr($id, 16,1) % 2 ;//男1 女0
+        # 
+        if(!isset($oProvice[$Provice]))
+        {
+            return false;
+        }
+        # 年份超限
+        if($BirthYear > 2078 || $BirthYear < 1900)
+        {
+            return false;
+        }
+        # 年月日是否合法
+        $RealDate           =   strtotime($BirthYear.'-'.$BirthMonth.'-'.$BirthDay);
+        if(date('Y',$RealDate) != $BirthYear || date('m',$RealDate) != $BirthMonth || date('d',$RealDate) != $BirthDay)
+        {
+            return false;
+        }
+        # 效验成功 返回关联数组，便于从身份证号中提取基本信息 boolean判断为true
+        return array('id'=>$id,'location'=>$oProvice[$Provice],'Y'=>$BirthYear,'m'=>$BirthMonth,'d'=>$BirthDay,'sex'=>$Sex);
     }
 }
