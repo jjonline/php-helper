@@ -360,4 +360,94 @@ class Tools
         }
         return $str;
     }
+
+    /**
+     * 清理html内容中的js代码和各种标签内包裹的onXX事件--待完善
+     * 直接清理掉所有标签内属性即可
+     * {
+     *     1、清理所有js代码
+     *     2、清理所有标签内属性性质的js事件
+     * }
+     * @param  string $content 待清理的html文本
+     * @return string 清理妥善的html文本
+     */
+    // public static function clear_jscode($content)
+    // {
+    //     ##去除所有JavaScript代码
+    //     $content = preg_replace('/<script(.*?)<\/?script>/is', "", $content);
+
+    //     ##去除所有a标签
+    //     // $content = preg_replace('/<\/?a[^>]>/', '', $content); ##a标签相对危害小一些，依据实际情况取消注释
+
+    //     ## 去除标签内的各种属性，保留img标签的src、alt和title属性，保留a标签的href属性
+    //     return preg_replace('/<(?!a\s+|img\s+)(\w+)\s+[^>]+>/', '<${1}>', $content);
+    // }
+
+    /**
+     * 将相对url转换为绝对完整Url
+     * <code>
+     *     将某一个Url（当前Url）页面中的超链接不同的写法转换为实际完整的Url
+     *     
+     *     例如1、当前Url为：
+     *         http://blog.jjonline.cn/phptech/172.html，该页面中超链接Url为：/view/173.html
+     *         则该超链接Url的实际完整Url为：http://blog.jjonline.cn/view/173.html
+     *     例如2、当前Url为：
+     *         http://blog.jjonline.cn/phptech/172.html，待转换Url为：./173.html 或 173.html
+     *         则待转换Url的实际完整Url为：http://blog.jjonline.cn/phptech/173.html
+     *     例如3、当前Url为：
+     *         http://blog.jjonline.cn/phptech/172.html，待转换Url为：../view/173.html
+     *         则待转换Url的实际完整Url为：http://blog.jjonline.cn/view/173.html
+     *     例如4、当前Url为：
+     *         http://blog.jjonline.cn/phptech/view/172.html，待转换Url为：./../../173.html
+     *         则待转换Url的实际完整Url为：http://blog.jjonline.cn/173.html
+     *         
+     *     当然第3种和第4种比较变态，但这种Url也是可能存在的
+     * </code>
+     * @param  string $sUrl    页面中的Url，例如：./../../171.html
+     * @param  string $baseUrl 该页面的Url，例如：http://blog.jjonline.cn/sort/php/area/article/173.html
+     * @return string
+     */
+    public static function to_absolute_url($sUrl,$baseUrl) 
+    {
+        $srcinfo = parse_url($sUrl);
+        if(isset($srcinfo['scheme'])) {
+            ##完整的Url无需转换
+            return $sUrl;
+        }
+
+        $baseinfo = parse_url($baseUrl);
+        $url      = $baseinfo['scheme'].'://'.$baseinfo['host'];##识别出基础的根Url
+
+        ##识别出待转换Url中的路径部分
+        if(substr($srcinfo['path'], 0, 1) == '/') {
+            $path   = $srcinfo['path'];
+        }else{
+            $path   = dirname($baseinfo['path']).'/'.$srcinfo['path'];
+        }
+        $rst        = array();##保存待转换Url中的路径部分，索引数组，一个元素是一个文件夹名或.和.. 下方对.和..进行替换
+        $path_array = explode('/', $path);
+        if(!$path_array[0]) {
+            $rst[]  = '';
+        }
+
+        foreach ($path_array as $key => $dir) {
+            if ($dir == '..')
+            {
+                if (end($rst) == '..')
+                {
+                    $rst[] = '..';
+                }elseif(!array_pop($rst)) {
+                    $rst[] = '..';
+                }
+            }elseif($dir && $dir != '.') {
+                $rst[]     = $dir;
+            }
+        }
+
+        if(!end($path_array)) {
+            $rst[] = '';
+        }
+        $url .= implode('/', $rst);
+        return str_replace('\\', '/', $url);
+    }
 }
