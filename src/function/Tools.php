@@ -450,4 +450,33 @@ class Tools
         $url .= implode('/', $rst);
         return str_replace('\\', '/', $url);
     }
+
+    /**
+     * 递归删除非空文件夹
+     * @param string $delete_dir 拟删除的文件夹路径---相对入口php文件的相对路径或绝对路径
+     */
+    public static function rm_dir($delete_dir)
+    {
+        ## 防止空串参数删根目录
+        if(empty($delete_dir))
+        {
+            return false;
+        }
+        $delete_dir     = rtrim($delete_dir,'/').'/';
+        try {
+            $iterator   = new \DirectoryIterator($delete_dir);//路径或文件不存在会抛出UnexpectedValueException异常
+            while($iterator->valid()) {
+                if($iterator->isFile()){
+                    unlink($delete_dir.$iterator->getFilename());##删除文件
+                }elseif($iterator->isDir() && !$iterator->isDot()) {
+                    self::rm_dir($delete_dir.$iterator->getFilename());##递归处理删除子文件夹下的文件
+                }
+                $iterator->next();
+            }
+            rmdir($delete_dir);##删除参数文件夹
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
 }
