@@ -24,4 +24,15 @@ namespace {
         #正则方式 '/^\w+(?:[-+.]\w+)*@\w+(?:[-.]\w+)*\.\w+(?:[-.]\w+)*$/' 邮箱域名顶级后缀至少两个字符
         return preg_match('/^\w+(?:[-+.]\w+)*@\w+(?:[-.]\w+)*\.\w{2,}$/',$mail)===1;
     }
+
+    /**
+     * 检测传入的变量是否为天朝手机号
+     * @param  mixed $phone
+     * @return boolean
+     */
+    function is_phone_valid($phone) {
+        #Fixed 171 170x
+        #详见：http://digi.163.com/15/0812/16/B0R42LSH00162OUT.html
+        return preg_match('/^13[\d]{9}$|14^[0-9]\d{8}|^15[0-9]\d{8}$|^18[0-9]\d{8}$|^170[015789]\d{7}|^171[89]\d{7}|^17[678]\d{8}$/',$phone)===1;
+    }
 }
