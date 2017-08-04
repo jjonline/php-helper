@@ -102,7 +102,7 @@ class FilterValid {
      * @param  string $string 字符串
      * @return boolean
      */
-    public static function is_chinese($str)
+    public static function is_chinese_valid($str)
     {
         return preg_match("/[\x{4e00}-\x{9fa5}]+/u", $str) === 1;
     }
@@ -112,7 +112,7 @@ class FilterValid {
      * @param  string $string 字符串
      * @return boolean
      */
-    public static function is_utf8($str)
+    public static function is_utf8_valid($str)
     {
         $c    = 0;
         $b    = 0;
