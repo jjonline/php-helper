@@ -16,7 +16,7 @@ composer安装：`composer require jjonline/php-helper`
 
 `ues jjonline\helper\Tools;`
 
-二、常用Class类(library)
+## 二、常用Class类(library)
 
 命名空间：`jjonline\library`
 
