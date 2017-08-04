@@ -36,7 +36,7 @@ class Tools
      * @param  string $str
      * @return string
      */
-    function nl2p($str)
+    public static function nl2p($str)
     {
         $str = str_replace(array('<p>', '</p>', '<br>', '<br/>', '<br />'), '', $str);
         return '<p>'.preg_replace("/([\n|\r\n|\r]{1,})/i", "</p>\n<p>", trim($str)).'</p>';
@@ -47,7 +47,7 @@ class Tools
      * @param  mixed $timestamp Unix时间戳
      * @return boolean
      */
-    function time_ago($timestamp)
+    public static function time_ago($timestamp)
     {
         $etime = time() - $timestamp;
         if ($etime < 1) return '刚刚';
@@ -73,7 +73,7 @@ class Tools
      * 判断是否SSL协议
      * @return boolean
      */
-    function is_ssl()
+    public static function is_ssl()
     {
         if(isset($_SERVER['HTTPS']) && ('1' == $_SERVER['HTTPS'] || 'on' == strtolower($_SERVER['HTTPS'])))
         {
@@ -91,7 +91,7 @@ class Tools
      * @param  boolean $adv 是否进行高级模式获取（有可能被伪装）---代理情况 
      * @return mixed
      */
-    function get_client_ip($type = 0,$adv=false)
+    public static function get_client_ip($type = 0,$adv=false)
     {
         $type       =  $type ? 1 : 0;
         static $ip  =   NULL;
@@ -114,5 +114,35 @@ class Tools
         $long = sprintf("%u",ip2long($ip));
         $ip   = $long ? array($ip, $long) : array('0.0.0.0', 0);
         return $ip[$type];
+    }
+
+    /**
+     * URL重定向 重定向后调用该函数的脚本将终止运行
+     * @param string  $url 重定向的URL地址
+     * @param integer $time 重定向的等待时间（秒）
+     * @param string  $msg 重定向前的提示信息
+     * @return void
+     */
+    public static function redirect($url, $time=0, $msg='')
+    {
+        //多行URL地址支持
+        $url        = str_replace(array("\n", "\r"), '', $url);
+        if (empty($msg))
+            $msg    = "系统将在{$time}秒之后自动跳转到{$url}！";
+        if (!headers_sent()) {
+            // redirect
+            if (0 === $time) {
+                header('Location: ' . $url);
+            } else {
+                header("refresh:{$time};url={$url}");
+                echo($msg);
+            }
+            exit();
+        } else {
+            $str      = "<meta http-equiv='Refresh' content='{$time};URL={$url}'>";
+            if ($time != 0)
+                $str .= $msg;
+            exit($str);
+        }
     }
 }
