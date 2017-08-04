@@ -17,7 +17,8 @@ class FilterValid {
      * @param  string $mail
      * @return boolean
      */
-    public static function is_mail_valid($mail) {
+    public static function is_mail_valid($mail)
+    {
         # PHP内置filter_var方式较为宽泛 不予采用
         /* !"#$%&'*+-/0123456789=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ^_ `abcdefghijklmnopqrstuvwxyz{|}~ 的类型均正确
          也就是说 这种格式的邮箱 JJon#?`!#$%&'*+-/line@JJonline.Cn 也会被filter_var认为是合法邮箱 不符合人类认知 暂不采用
@@ -33,7 +34,8 @@ class FilterValid {
      * @param  mixed $phone
      * @return boolean
      */
-    public static function is_phone_valid($phone) {
+    public static function is_phone_valid($phone)
+    {
         #Fixed 171 170x
         #详见：http://digi.163.com/15/0812/16/B0R42LSH00162OUT.html
         return preg_match('/^13[\d]{9}$|14^[0-9]\d{8}|^15[0-9]\d{8}$|^18[0-9]\d{8}$|^170[015789]\d{7}|^171[89]\d{7}|^17[678]\d{8}$/',$phone)===1;
@@ -50,7 +52,27 @@ class FilterValid {
      * @param  mixed $url
      * @return boolean
      */
-    public static function is_url_valid($url) {
+    public static function is_url_valid($url)
+    {
         return preg_match('/^http[s]?:\/\/(?:(?:[0-9]{1,3}\.){3}[0-9]{1,3}|(?:[0-9a-z_!~*\'()-]+\.)*(?:[0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\.[a-z]{2,6})(?::[0-9]{1,4})?(?:(?:\/\?)|(?:\/[0-9a-zA-Z_!~\*\'\(?:\)\.;\?:@&=\+\$,%#-\/]*)?)$/i',$url)===1;
+    }
+
+    /**
+     * 检测传入的变量是否为一个合法的账户id
+     * ---------
+     * 提供两种方法:函数方法和正则方法
+     * 默认数字ID长度为4至11位
+     * ---------
+     * @param  mixed $uid       待检测的数字ID
+     * @param  int   $minLength 允许的uid最短位数 默认4
+     * @param  int   $maxLength 允许的uid最长位数 默认11
+     * @return boolean
+     */
+    function is_uid_valid($uid, $minLength = 4, $maxLength = 11)
+    {
+        #正则方式
+        return preg_match('/^[1-9]\d{'.( $minLength - 1 ).','.( $maxLengt - 1 ).'}$/',$uid)===1;
+        #函数方式 可能未编译ctype扩展不存在ctype_digit内置函数
+        return strlen($uid)>=$minLength && strlen($uid)<=$maxLength && ctype_digit((string)$uid);
     }
 }
