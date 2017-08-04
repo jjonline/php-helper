@@ -9,8 +9,9 @@
 
 namespace jjonline\helper;
 
-class FilterValid {
-    
+class FilterValid
+{
+
     /**
      * 检测传入的变量是否为合法邮箱 提供两种方法 可选内置fliter函数 
      * 默认正则[邮箱用户名(即@符号之前的部分)构成部分为数字、字母、下划线、中划线和点均可，且开头必须是数字或字母]
