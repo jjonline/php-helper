@@ -68,11 +68,31 @@ class FilterValid {
      * @param  int   $maxLength 允许的uid最长位数 默认11
      * @return boolean
      */
-    function is_uid_valid($uid, $minLength = 4, $maxLength = 11)
+    public static function is_uid_valid($uid, $minLength = 4, $maxLength = 11)
     {
         #正则方式
         return preg_match('/^[1-9]\d{'.( $minLength - 1 ).','.( $maxLengt - 1 ).'}$/',$uid)===1;
         #函数方式 可能未编译ctype扩展不存在ctype_digit内置函数
         return strlen($uid)>=$minLength && strlen($uid)<=$maxLength && ctype_digit((string)$uid);
+    }
+
+    /**
+     * 检测传入的变量是否为一个合法的账户密码
+     * ---------
+     * 1、必须同时包含数字和字母
+     * 2、通过第二个参数指定最小长度，默认值6
+     * 3、通过第三个可选参数指定最大长度，默认值18
+     * ---------
+     * @param  string $password 需要被判断的字符串
+     * @param  int $minLength 允许的账户密码最短位数 默认6
+     * @param  int $maxLength 允许的账户密码最长位数 默认16
+     * @return boolean
+     */
+    public static function is_password_valid($password, $minLength = 6, $maxLength = 18)
+    {
+        if(strlen($password) > $maxLength || strlen($password) < $minLength) {
+            return false;
+        }
+        return preg_match('/\d{1,'.$maxLength.'}/',$password)===1 && preg_match('/[a-zA-Z]{1,'.$maxLength.'}/',$password)===1;
     }
 }
