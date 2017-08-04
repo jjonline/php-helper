@@ -16,11 +16,8 @@
     },
     "autoload": {
         "psr-4": {
-            "jjonline\\": "src/library"
-        },
-        "files": [
-            "src/function/CommonFunction.php",
-            "src/function/FilterValid.php"
-        ]
+            "jjonline\\library\\": "src/library",
+            "jjonline\\helper\\": "src/function"
+        }
     }
 }
