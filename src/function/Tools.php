@@ -32,6 +32,39 @@ class Tools
     }
 
     /**
+     * 用户名加星隐藏核心信息
+     * @param  $nickname 用户名、昵称
+     * @return 隐藏处理后的用户名、昵称
+     */
+    public static function hide_name($nickname)
+    {
+        if(mb_strlen($nickname) <=3)
+        {
+            return '***';
+        }
+        $begin = self::mbsubstr($nickname,0,1,'utf-8');
+        $end   = self::mbsubstr($nickname,-1,1,'utf-8');
+        return $begin.'***'.$end;
+    }
+
+    /**
+     * 隐藏ip v4地址的后两位
+     * @param  $ip_v4 ipV4的地址
+     * @return 处理隐藏后的地址
+     */
+    public static function hide_ipv4($ip_v4)
+    {
+        $ip = explode('.', $ip_v4);
+        if(count($ip) == 4)
+        {
+            $ip[2] = '**';
+            $ip[3] = '**';
+            return implode('.', $ip);
+        }
+        return $ip_v4;
+    }
+
+    /**
      * nl2br的类似函数，将(多个)换行替换成p标签
      * @param  string $str
      * @return string
