@@ -475,17 +475,39 @@ class Tools
      * @param  string $content 待清理的html文本
      * @return string 清理妥善的html文本
      */
-    // public static function clear_jscode($content)
-    // {
-    //     ##去除所有JavaScript代码
-    //     $content = preg_replace('/<script(.*?)<\/?script>/is', "", $content);
+    public static function clear_js_code($content)
+    {
+        ##去除所有JavaScript代码
+        $content = preg_replace('/<script(.*?)<\/?script>/is', "", $content);
 
-    //     ##去除所有a标签
-    //     // $content = preg_replace('/<\/?a[^>]>/', '', $content); ##a标签相对危害小一些，依据实际情况取消注释
+        ##去除所有a标签
+        // $content = preg_replace('/<\/?a[^>]>/', '', $content); ##a标签相对危害小一些，依据实际情况取消注释
 
-    //     ## 去除标签内的各种属性，保留img标签的src、alt和title属性，保留a标签的href属性
-    //     return preg_replace('/<(?!a\s+|img\s+)(\w+)\s+[^>]+>/', '<${1}>', $content);
-    // }
+        ## 去除标签内的各种事件属性(以on开头的全部干掉，可能会误杀)，保留非事件属性
+        return preg_replace_callback('/<(\w+)\s+([^>]+)>/i', function ($match) {
+            // self::dump($match);
+            // 匹配出所有的属性对
+            $prop = preg_split('/\s+/', trim($match[2]));
+            // 去除所有属性中以on开头的属性名和属性值
+            foreach ($prop as $key => $value) {
+                if(preg_match('/^on/', $value))
+                {
+                    unset($prop[$key]);
+                }
+            }
+            // self::dump($prop);
+            return empty($prop) ? '<'.$match[1].'>' : '<'.$match[1].' '.implode(' ', $prop).'>';
+            /**
+             * 2017-8-7 Bug
+             * 
+             * 下面这种方式可以规避清理掉onxx事件，例如：
+             * <p onclick="alert("dd")" oonload="ds" nloadonload="ds" ="load">string</p>
+             * 
+             * $Attribute = trim(preg_replace('/on\w+=.*?\s/is', '', $match[2].' '));
+             * return empty($Attribute) ? '<'.$match[1].'>' : '<'.$match[1].' '.$Attribute.'>';
+             */
+        }, $content);
+    }
 
     /**
      * 将相对url转换为绝对完整Url
