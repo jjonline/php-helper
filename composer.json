@@ -3,6 +3,7 @@
     "description": "Call Together Common PHP Functions And Librarys.",
     "keywords": ["function","class","library"],
     "homepage": "https://github.com/jjonline/php-helper",
+    "type": "library",
     "authors": [
         {
             "name": "Jea杨",
