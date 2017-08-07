@@ -32,9 +32,80 @@ class Tools
     }
 
     /**
+     * 判断是否移动端浏览器
+     * @return boolean
+     */
+    public static function is_mobile_browser()
+    {
+        // 如果有HTTP_X_WAP_PROFILE则一定是移动设备
+        if(isset ($_SERVER['HTTP_X_WAP_PROFILE']))
+        {
+            return true;
+        }
+        // 如果via信息含有wap则一定是移动设备,部分服务商会屏蔽该信息
+        if(isset($_SERVER['HTTP_VIA']) && stristr($_SERVER['HTTP_VIA'], "wap"))
+        {
+            return  true;
+        }
+        // userAgent匹配
+        if (isset ($_SERVER['HTTP_USER_AGENT']))
+        {
+            $clientkeywords = array(
+                'nokia',
+                'sony',
+                'ericsson',
+                'mot',
+                'samsung',
+                'htc',
+                'sgh',
+                'lg',
+                'sharp',
+                'sie-',
+                'philips',
+                'panasonic',
+                'alcatel',
+                'lenovo',
+                'iphone',
+                'ipod',
+                'blackberry',
+                'meizu',
+                'android',
+                'netfront',
+                'symbian',
+                'ucweb',
+                'windowsce',
+                'palm',
+                'operamini',
+                'operamobi',
+                'openwave',
+                'nexusone',
+                'cldc',
+                'midp',
+                'wap',
+                'mobile'
+            );
+            if(preg_match("/(" . implode('|', $clientkeywords) . ")/i", strtolower($_SERVER['HTTP_USER_AGENT'])))
+            {
+                return true;
+            }
+        }
+        // 协议法，因为有可能不准确，放到最后判断
+        if(isset ($_SERVER['HTTP_ACCEPT']))
+        {
+            // 如果只支持wml并且不支持html那一定是移动设备
+            // 如果支持wml和html但是wml在html之前则是移动设备
+            if((strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') !== false) && (strpos($_SERVER['HTTP_ACCEPT'], 'text/html') === false || (strpos($_SERVER['HTTP_ACCEPT'], 'vnd.wap.wml') < strpos($_SERVER['HTTP_ACCEPT'], 'text/html'))))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * 用户名加星隐藏核心信息
-     * @param  $nickname 用户名、昵称
-     * @return 隐藏处理后的用户名、昵称
+     * @param  string $nickname 用户名、昵称
+     * @return string 隐藏处理后的用户名、昵称
      */
     public static function hide_name($nickname)
     {
@@ -42,23 +113,23 @@ class Tools
         {
             return '***';
         }
-        $begin = self::mbsubstr($nickname,0,1,'utf-8');
-        $end   = self::mbsubstr($nickname,-1,1,'utf-8');
+        $begin = self::mbsubstr($nickname,0,1,'utf8');
+        $end   = self::mbsubstr($nickname,-1,1,'utf8');
         return $begin.'***'.$end;
     }
 
     /**
-     * 隐藏ip v4地址的后两位
-     * @param  $ip_v4 ipV4的地址
-     * @return 处理隐藏后的地址
+     * 隐藏ip v4地址的中间两位
+     * @param  string $ip_v4 ipV4的地址
+     * @return string 处理隐藏后的地址
      */
     public static function hide_ipv4($ip_v4)
     {
         $ip = explode('.', $ip_v4);
         if(count($ip) == 4)
         {
+            $ip[1] = '**';
             $ip[2] = '**';
-            $ip[3] = '**';
             return implode('.', $ip);
         }
         return $ip_v4;
