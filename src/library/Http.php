@@ -186,7 +186,7 @@ class Http {
         {
             return isset($this->requestCookie[$key]) ? $this->requestCookie[$key] : null;
         }
-        return $this->data;
+        return $this->requestCookie;
     }
 
     /**
@@ -297,6 +297,15 @@ class Http {
     public function getBody()
     {
         return $this->body;
+    }
+
+    /**
+     * 返回curl执行完毕后的请求体完整字符串包括header和body|执行出错返回空串
+     * @return string
+     */
+    public function getResult()
+    {
+        return $this->result === false ? '' : $this->result;
     }
 
     /**
