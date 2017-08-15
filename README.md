@@ -278,7 +278,7 @@ $http = Http::init();
     /**
     * 上述的代码也可以这样写：
     * $isSuccess = $http->setReferer('http://blog.jjonline.cn')
-    *            ->setUserAgent('Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36')
+    *            ->setUserAgent('Mozilla/5.0 (Windows NT 6.1; Win64; x64) Chrome/60.0.3112.90 Safari/537.36')
     *            ->setRequestCookie('JID','so7i7srvbk4c5dd0748df8va23')
     *            ->setUrl('http://blog.jjonline.cn')
     *            ->get();
