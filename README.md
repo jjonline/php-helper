@@ -263,7 +263,7 @@ $http = Http::init();
     // [可选的]设置请求时的header头Referer
     $http->setReferer('http://blog.jjonline.cn');
     // [可选的]设置请求时的header头User-Agent值
-    $http->setUserAgent('Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36');
+    $http->setUserAgent('Mozilla/5.0 (Windows NT 6.1; Win64; x64) Chrome/60.0.3112.90 Safari/537.36');
     // [可选的]设置请求时的cookie
     $http->setRequestCookie('JID','so7i7srvbk4c5dd0748df8va23');
     // setData方法在get请求时无效，若需要为get方法传递get变量，请拼接好变量后通过setUrl方法设置
