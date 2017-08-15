@@ -298,10 +298,10 @@ $http = Http::init();
     use jjonline\library\Http;
     $http      = Http::init();
     $isSuccess = $http->get('http://blog.jjonline.cn/Images/mm.jpg');
-    $isSuccess && $http->('./m.jpg');//此时若不出现异常和错误，脚本所在目录会看到下载的这种图片
+    $isSuccess && $http->('./m.jpg');//此时若不出现异常和错误，脚本所在目录会看到下载的这张图片
 
 
-### sample2 post请求
+### sample3 post请求
 
     use jjonline\library\Http;
     $http      = Http::init();
@@ -316,7 +316,8 @@ $http = Http::init();
       ->post('http://blog.jjonline.cn');
     // 接下来的代码省略，当然啦我的博客个人首页对post响应与get无异
 
-    ### sample3 post上传文件
+### sample4 post上传文件
+
     use jjonline\library\Http;
     $http      = Http::init();
     // 设置过程省略一部分...
