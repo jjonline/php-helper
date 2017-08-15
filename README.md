@@ -144,27 +144,32 @@ $http = Http::init();
 #### 设置/获取请求的url
 `$http->setUrl('http://blog.jjonline.cn');` 和 `$http->getUrl();` 
 >设置请求的远程Url网址，或在调用最终`get`、`post`方法时第一个参数传入，请参考`get`、`post`方法说明
->该方法可以链式调用
+
+>该方法可以链式调用，多次调用后面调用设置的值将覆盖前面调用设置的值
 
 #### 设置连接超时的时间
 `$http->setTimeOut(30);` 和 `$http->getTimeOut();` 
 >设置连接超时的最大时间，单位：秒
+
 >setTimeOut方法可以链式调用，多次调用后面调用设置的值将覆盖前面调用设置的值
 
 #### 设置/获取请求体header头的Referer
 `$http->setReferer('http://blog.jjonline.cn');` 和 `$http->getReferer();`
 >设置请求的eader头的Referer，Referer是什么就不解释了
+
 >setReferer方法可以链式调用，多次调用后面调用设置的值将覆盖前面调用设置的值
 
 #### 设置/获取请求体header头的User-Agent值
 `$http->setUserAgent('http://blog.jjonline.cn');` 和 `$http->getUserAgent();`
 >设置请求的header头的User-Agent值，User-Agent值是什么就不解释了
+
 >setUserAgent方法可以链式调用，多次调用后面调用设置的值将覆盖前面调用设置的值
 
 #### 设置/获取Post发送的数据key-value
 `$http->setData('fieldName','fieldValue');` 和 `$http->getData('fieldName');`
 >key-vallue形式的二维数组一次设置多个`$http->setData([['fieldName1'=>'fieldValue1'],['fieldName2'=>'fieldValue2']...]);`
 >设置请求的header头的User-Agent值，User-Agent值是什么就不解释了；获取已设置的值需要传入获取设置值的fieldName
+
 >setData方法可以多次、链式调用，多次调用设置多个Post发送的键值对或覆盖
 
 
@@ -172,11 +177,13 @@ $http = Http::init();
 `$http->setRequestCookie('cookieName','cookieValue');` 和 `$http->geetRequestCookie('cookieName');`
 >key-vallue形式的二维数组一次设置多个`$http->setData([['cookieName1'=>'cookieValue1'],['cookieName2'=>'cookieValue2']...]);`
 >设置请求的本次请求拟发送的cookie键值对；获取已设置的cookie值需要传入获取拟发送的cookie的名字
+
 >setRequestCookie方法可以多次、链式调用，多次调用设置多个cookie键值对或覆盖
 
 #### 设置Post方法拟上传的文件
 `$http->setUploadFile('UploadFileFieldName','FileDir');`
 >设置Post方法上传的文件，第一个参数为该form域的名字，第二个参数为拟上传文件的路径
+
 >setUploadFile方法可以多次、链式调用，多次调用设置多个拟上传的文件或覆盖
 
 
@@ -201,18 +208,21 @@ $http = Http::init();
 #### 执行get请求
 `$http->get($url);`
 >可选的设置方法调用完毕，最后调用`get`方法执行get请求
+
 >方法体返回boolean值，true请求执行成功，false请求执行失败，获取请求成功的响应数据或请求失败的失败信息请继续往下看
 
 
 #### 执行post请求
 `$http->get($url,$data);`
 >可选的设置方法调用完毕，最后调用`post`方法执行post请求
+
 >方法体返回boolean值，true请求执行成功，false请求执行失败，获取请求成功的响应数据或请求失败的失败信息请继续往下看
 
 #### 保存请求成功后的数据，或者称之为：下载远程数据
 `$http->save($local_file_dir);`
 >执行完get或post方法后，可以将执行成功返回的数据保存至本地服务器，`$local_file_dir`指定保存的文件的路径
 >save方法返回Boolean值，true保存文件成功，false保存文件失败、或尚未执行get或post方法、或执行get或post方法失败
+
 >需要注意的是save方法需要在get或post方法执行之后另行调用，get和post方法不支持链式调用，所以不要在get或post方法后再链式调用save方法；例如:
 
 >`$ret = $http->get($url);`
