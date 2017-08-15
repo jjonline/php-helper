@@ -405,6 +405,9 @@ class Http {
         }
         fwrite($fp, $this->body);
         fclose($fp);
+        // fopen -- fwrite -- fclose方法可能出现E_WARNING错误
+        // 自定义set_error_handler可捕获处理，此处暂不使用最简单的file_put_contents方法
+        // file_put_contents($local_dir, $this->body);
         return true;
     }
 
