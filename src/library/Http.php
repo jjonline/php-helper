@@ -86,6 +86,10 @@ class Http {
             // 避免array_merge重新组合数组$this->option中的整数键名
             foreach ($key as $_key => $value) {
                 $_key = constant(strtoupper($_key));//兼容以字符串形式传入curl设置参数
+                if(is_null($_key))
+                {
+                    throw new Exception('Constant Name Do Not Exist '.$key, 500);
+                }
                 $this->option[$_key] = $value;
             }
         }else{
@@ -103,7 +107,12 @@ class Http {
     {
         if(!empty($key))
         {
-            return isset($this->option[$key]) ? $this->option[$key] : null;
+            $_key = constant(strtoupper($key));
+            if(is_null($_key))
+            {
+                throw new Exception('Constant Name Do Not Exist '.$key, 500);
+            }
+            return isset($this->option[$_key]) ? $this->option[$_key] : null;
         }
         return $this->option;
     }
