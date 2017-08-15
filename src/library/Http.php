@@ -15,7 +15,6 @@ use Exception;
 class Http {
     // 请求url
     private $url;
-    private $retry   = 0;
     // 请求超时时间，默认30秒
     private $timeout = 30;
     // curl参数--带一些默认值
@@ -275,6 +274,25 @@ class Http {
     }
 
     /**
+     * 设置cUrl请求连接的超时时间|默认值30秒
+     * @param int $time 设置的超时时间，单位：秒
+     */
+    public function setTimeOut($time)
+    {
+        $this->timeout = intval($timeout);
+        return $this;
+    }
+
+    /**
+     * 获取设置的链接超时时间，单位：秒
+     * @return int
+     */
+    public function getTimeOut()
+    {
+        return $this->timeout;
+    }
+
+    /**
      * 设置请求的Url
      * @param string $url 请求url
      */
@@ -369,6 +387,9 @@ class Http {
         // 可能的待处理的cookie
         $this->_handleRequestCookie();
 
+        // 链接超时时间
+        $this->option[CURLOPT_TIMEOUT]        = $this->timeout;
+
         // CURLOPT_URL亦可设置请求Url
         $ch     = curl_init($url);
         // 数组方式设置各参数项
@@ -415,6 +436,9 @@ class Http {
         $this->option[CURLOPT_RETURNTRANSFER] = true;
         // 可能的待处理的cookie
         $this->_handleRequestCookie();
+
+        // 链接超时时间
+        $this->option[CURLOPT_TIMEOUT]        = $this->timeout;
 
         // CURLOPT_URL亦可设置请求Url
         $ch     = curl_init($url);
