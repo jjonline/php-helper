@@ -132,6 +132,26 @@ class Http {
     }
 
     /**
+     * 设置请求体header头中User-Agent值
+     * 本类默认设置useAgent值为win7x64位下的chrome浏览器60版本的头信息
+     * @param string $userAgent 设置的User-Agent值
+     */
+    public function setUserAgent($userAgent)
+    {
+        $this->option[CURLOPT_USERAGENT] = $userAgent;
+        return $this;
+    }
+
+    /**
+     * 获取设置的userAgent头信息，未手动设置将获取默认值
+     * @return string
+     */
+    public function getUserAgent()
+    {
+        return isset($this->option[CURLOPT_USERAGENT]) ? $this->option[CURLOPT_USERAGENT] : '';
+    }
+
+    /**
      * 设置curl发送的数据
      * @param string|array $key   curl发送数据的key名称或数组包裹的多个key-value或事先已拼接好的数据字符串
      * @param string       $value 第一个参数为string时的value值
