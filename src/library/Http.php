@@ -110,6 +110,28 @@ class Http {
     }
 
     /**
+     * 设置请求体Referer
+     * @param string $referer 设置请求体的Referer字符串|一个有效的网址
+     */
+    public function setReferer($referer)
+    {
+        if (filter_var($referer, FILTER_VALIDATE_URL)) {
+            $this->option[CURLOPT_REFERER] = $referer;
+            return $this;
+        }
+        throw new Exception('Http Referer is invalid.', 500);
+    }
+
+    /**
+     * 获取已设置的Referer
+     * @return string
+     */
+    public function getReferer()
+    {
+        return isset($this->option[CURLOPT_REFERER]) ? $this->option[CURLOPT_REFERER] : '';
+    }
+
+    /**
      * 设置curl发送的数据
      * @param string|array $key   curl发送数据的key名称或数组包裹的多个key-value或事先已拼接好的数据字符串
      * @param string       $value 第一个参数为string时的value值
