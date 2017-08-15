@@ -285,12 +285,12 @@ $http = Http::init();
     */
     if($isSuccess)
     {
-     echo '请求成功，header数据为：';
-     Tools::dump($http->getHeader());
-     echo 'body数据为：';
-     Tools::dump($http->getBody());
+       echo '请求成功，header数据为：';
+       Tools::dump($http->getHeader());
+       echo 'body数据为：';
+       Tools::dump($http->getBody());
     }else {
-     echo '请求成功失败，curl_error()返回值为：'.$http->getError().'curl_errno()返回值为：'.$http->getErrno();
+       echo '请求成功失败，curl_error()返回值为：'.$http->getError().'curl_errno()返回值为：'.$http->getErrno();
     }
 
 ### sample2 get请求下载图片
@@ -309,7 +309,7 @@ $http = Http::init();
     // 设置post提交的数据
     $http->setOption(CURLOPT_FILETIME,true)
       ->setReferer('http://blog.jjonline.cn')
-      ->setUserAgent('Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36')
+      ->setUserAgent('Mozilla/5.0 (Windows NT 6.1; Win64; x64) Chrome/60.0.3112.90 Safari/537.36')
       ->setRequestCookie('JID','so7i7srvbk4c5dd0748df8va23')
       ->setData('postField1','这是post发送的名为postField1的值')
       ->setData('postField2','这是post发送的名为postField2的值')
@@ -324,4 +324,5 @@ $http = Http::init();
     $http->setUploadFile('FileField','../mm.jpg')
       ->post('http://blog.jjonline.cn');
     // 当然，这里post之前依然可以调用setOption、setReferer等之类的方法
-    // 这里上传文件后假设被请求的服务器端（也就是接收文件上传方）是PHP开发的，那么可以通过$_FILES['FileField']读取到这个上传的文件
+    // 这里上传文件后假设被请求的服务器端（也就是接收文件上传方）是PHP开发的
+    // 那么可以通过$_FILES['FileField']读取到这个上传的文件
