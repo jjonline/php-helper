@@ -331,8 +331,6 @@ class Http {
 
         curl_close($ch);
 
-        var_dump($this->result);
-
         if($this->errno == 0)
         {
             list($this->header, $this->body) = explode("\r\n\r\n", $this->result,2);
@@ -389,6 +387,25 @@ class Http {
             return true;
         }
         return false;//请求出现错误，返回false
+    }
+
+    /**
+     * 将返回的body保存至脚本所在服务器文件系统
+     * @param  string $local_dir 本地存储的路径，完整的待文件名和文件后缀的相对或绝对路径
+     * @return boolean
+     */
+    public function save($local_dir)
+    {
+        if ($this->error) {
+            return false;
+        }
+        $fp = @fopen($local_dir, 'w');
+        if ($fp === false) {
+            return false;
+        }
+        fwrite($fp, $this->body);
+        fclose($fp);
+        return true;
     }
 
     /**
