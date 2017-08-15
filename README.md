@@ -44,7 +44,7 @@
 
 ### 1.2、通用函数
 
-`ues jjonline\helper\Tools;`
+`uese jjonline\helper\Tools;`
 
 
 * `Tools::is_weixin_browser($_SERVER['HTTP_USER_AGENT'])` 检查是否在微信浏览器内打开，**可选参数**传入客户端浏览器UserAgent字符串
@@ -151,7 +151,7 @@ $http = Http::init();
 >设置连接超时的最大时间，单位：秒
 >setTimeOut方法可以链式调用，多次调用后面调用设置的值将覆盖前面调用设置的值
 
-### 设置/获取请求体header头的Referer
+#### 设置/获取请求体header头的Referer
 `$http->setReferer('http://blog.jjonline.cn');` 和 `$http->getReferer();`
 >设置请求的eader头的Referer，Referer是什么就不解释了
 >setReferer方法可以链式调用，多次调用后面调用设置的值将覆盖前面调用设置的值
@@ -213,8 +213,10 @@ $http = Http::init();
 `$http->save($local_file_dir);`
 >执行完get或post方法后，可以将执行成功返回的数据保存至本地服务器，`$local_file_dir`指定保存的文件的路径
 >save方法返回Boolean值，true保存文件成功，false保存文件失败、或尚未执行get或post方法、或执行get或post方法失败
->需要注意的是save方法需要在get或post方法执行之后另行调用，get和post方法不再支持链式调用，例如:
+>需要注意的是save方法需要在get或post方法执行之后另行调用，get和post方法不支持链式调用，所以不要在get或post方法后再链式调用save方法；例如:
+
 >`$ret = $http->get($url);`
+
 >`$ret && $http->save($dir);`
 
 
@@ -245,9 +247,80 @@ $http = Http::init();
 >若没有出错将返回空字符串，若出错将返回错误描述字符串，不要依据该方法来判断执行成功还是失败
 
 #### 获取请求失败后的错误号，`curl_errno`的返回值
-`$http->getError();`
+`$http->getErrno();`
 >若没有出错将数字0，若出错将返回不为0的数字，可以依据该方法的返回值`全等于0`判断请求成功，`不全等于0`请求失败
 
 ### 获取http请求连接资源句柄的信息数组，`curl_getinfo`的无第二个参数返回值
 `$http->getInfo();`
 >`curl_getinfo`函数的没有第二个参数的返回值
+
+
+### sample1 get请求晶晶博客
+
+> uese jjonline\helper\Tools;
+> use jjonline\library\Http;
+> $http = Http::init();
+> // [可选的]设置请求时的header头Referer
+> $http->setReferer('http://blog.jjonline.cn');
+> // [可选的]设置请求时的header头User-Agent值
+> $http->setUserAgent('Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36');
+> // [可选的]设置请求时的cookie
+> $http->setRequestCookie('JID','so7i7srvbk4c5dd0748df8va23');
+> // setData方法在get请求时无效，若需要为get方法传递get变量，请拼接好变量后通过setUrl方法设置
+> // 设置请求晶晶的博客首页的Url
+> $http->setUrl('http://blog.jjonline.cn');
+> // 执行get请求并判断执行状态
+> $isSuccess = $http->get();
+> /**
+>  * $http->setUrl('http://blog.jjonline.cn'); 和 $isSuccess = $http->get();也可以简写成
+>  * $isSuccess = $http->get('http://blog.jjonline.cn');
+>  */
+>  /**
+>   * 上述的代码也可以这样写：
+>   * $isSuccess = $http->setReferer('http://blog.jjonline.cn')
+>   *            ->setUserAgent('Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36')
+>   *            ->setRequestCookie('JID','so7i7srvbk4c5dd0748df8va23')
+>   *            ->setUrl('http://blog.jjonline.cn')
+>   *            ->get();
+>   */
+> if($isSuccess)
+> {
+>     echo '请求成功，header数据为：';
+>     Tools::dump($http->getHeader());
+>     echo 'body数据为：';
+>     Tools::dump($http->getBody());
+> }else {
+>     echo '请求成功失败，curl_error()返回值为：'.$http->getError().'curl_errno()返回值为：'.$http->getErrno();
+> }
+
+### sample2 get请求下载图片
+
+> use jjonline\library\Http;
+> $http      = Http::init();
+> $isSuccess = $http->get('http://blog.jjonline.cn/Images/mm.jpg');
+> $isSuccess && $http->('./m.jpg');//此时若不出现异常和错误，脚本所在目录会看到下载的这种图片
+
+
+### sample2 post请求
+
+> use jjonline\library\Http;
+> $http      = Http::init();
+> // 设置过程省略一部分...
+> // 设置post提交的数据
+> $http->setOption(CURLOPT_FILETIME,true)
+>      ->setReferer('http://blog.jjonline.cn')
+>      ->setUserAgent('Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36')
+>      ->setRequestCookie('JID','so7i7srvbk4c5dd0748df8va23')
+>      ->setData('postField1','这是post发送的名为postField1的值')
+>      ->setData('postField2','这是post发送的名为postField2的值')
+>      ->post('http://blog.jjonline.cn');
+> // 接下来的代码省略，当然啦我的博客个人首页对post响应与get无异
+
+### sample3 post上传文件
+> use jjonline\library\Http;
+> $http      = Http::init();
+> // 设置过程省略一部分...
+> $http->setUploadFile('FileField','../mm.jpg')
+>      ->post('http://blog.jjonline.cn');
+> // 当然，这里post之前依然可以调用setOption、setReferer等之类的方法
+> // 这里上传文件后假设被请求的服务器端（也就是接收文件上传方）是PHP开发的，那么可以通过$_FILES['FileField']读取到这个上传的文件
