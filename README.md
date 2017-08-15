@@ -65,7 +65,7 @@
 >注意返回值将在`</p>`结尾标签之后加入一个`\n`换行，本例返回值完整表示法为：`"<p>这是一段带有换行符</p>\n<p>的字符串</p>"`，注意PHP中单双引号的区别！
 
 * `Tools::time_ago('1502075022')` 将linux时间戳转换为`xx前`表示法
->返回值依据传入linux时间戳与当前时间戳的差值不同而不同，返回值有如下几种：`刚刚、`1分钟前`、`2小时前`、`3周前`、`5个月前`、`3年前` 等
+>返回值依据传入linux时间戳与当前时间戳的差值不同而不同，返回值有如下几种：`刚刚`、`1分钟前`、`2小时前`、`3周前`、`5个月前`、`3年前` 等
 
 * `Tools::is_ssl()` 检测当前http请求是否为ssl加密方式
 >是ssl加密方式返回true不是返回false，说人话就是：`http协议`返回false，`https协议`返回true
@@ -124,10 +124,130 @@ Html事件属性参考：[HTML事件属性](http://www.w3school.com.cn/tags/html
 
 ## 二、常用Class类(library)
 
+> `常用Class类(library)`从v2.0版开始添加！
+
 命名空间：`jjonline\library`
 
 2.1、Http各方法封装类
 
-*该类尚未完结*
+>基于curl的支持get、post两种常见的http请求方法封装，支持设置cookie、Referer、User-Agent、自定义curl参数、下载保存文件以及post上传文件。
+>支持链式操作
 
 `use jjonline\library\Http;`
+
+
+### 初始化和设置/获取初始化参数
+
+>初始化Http类单例
+$http = Http::init();
+
+#### 设置/获取请求的url
+`$http->setUrl('http://blog.jjonline.cn');` 和 `$http->getUrl();` 
+>设置请求的远程Url网址，或在调用最终`get`、`post`方法时第一个参数传入，请参考`get`、`post`方法说明
+>该方法可以链式调用
+
+#### 设置连接超时的时间
+`$http->setTimeOut(30);` 和 `$http->getTimeOut();` 
+>设置连接超时的最大时间，单位：秒
+>setTimeOut方法可以链式调用，多次调用后面调用设置的值将覆盖前面调用设置的值
+
+### 设置/获取请求体header头的Referer
+`$http->setReferer('http://blog.jjonline.cn');` 和 `$http->getReferer();`
+>设置请求的eader头的Referer，Referer是什么就不解释了
+>setReferer方法可以链式调用，多次调用后面调用设置的值将覆盖前面调用设置的值
+
+#### 设置/获取请求体header头的User-Agent值
+`$http->setUserAgent('http://blog.jjonline.cn');` 和 `$http->getUserAgent();`
+>设置请求的header头的User-Agent值，User-Agent值是什么就不解释了
+>setUserAgent方法可以链式调用，多次调用后面调用设置的值将覆盖前面调用设置的值
+
+#### 设置/获取Post发送的数据key-value
+`$http->setData('fieldName','fieldValue');` 和 `$http->getData('fieldName');`
+>key-vallue形式的二维数组一次设置多个`$http->setData([['fieldName1'=>'fieldValue1'],['fieldName2'=>'fieldValue2']...]);`
+>设置请求的header头的User-Agent值，User-Agent值是什么就不解释了；获取已设置的值需要传入获取设置值的fieldName
+>setData方法可以多次、链式调用，多次调用设置多个Post发送的键值对或覆盖
+
+
+#### 设置/获取拟发送的数据中附带的cookie键值对
+`$http->setRequestCookie('cookieName','cookieValue');` 和 `$http->geetRequestCookie('cookieName');`
+>key-vallue形式的二维数组一次设置多个`$http->setData([['cookieName1'=>'cookieValue1'],['cookieName2'=>'cookieValue2']...]);`
+>设置请求的本次请求拟发送的cookie键值对；获取已设置的cookie值需要传入获取拟发送的cookie的名字
+>setRequestCookie方法可以多次、链式调用，多次调用设置多个cookie键值对或覆盖
+
+#### 设置Post方法拟上传的文件
+`$http->setUploadFile('UploadFileFieldName','FileDir');`
+>设置Post方法上传的文件，第一个参数为该form域的名字，第二个参数为拟上传文件的路径
+>setUploadFile方法可以多次、链式调用，多次调用设置多个拟上传的文件或覆盖
+
+
+#### 获取cUrl的设置参数
+`$http->setOption(CURLOPT_REFERER);`
+>获取用来设置`curl_setopt`函数方法参数的参数值，也可以`$http->setOption('CURLOPT_REFERER');`这样调用，但不建议~
+
+#### 高阶自定义设置：设置cUrl的参数
+`$http->setOption(CURLOPT_REFERER,'http://blog.jjonline.cn');`
+>该方法的参数与`curl_setopt(resource $ch , int $option , mixed $value )`第2、3两个参数一致即可
+>setOption方法第一个参数为常量，可选的常量请参考：[curl_setopt常量](http://php.net/manual/zh/function.curl-setopt.php)
+>代码做了兼容处理，`$http->setOption('CURLOPT_REFERER','http://blog.jjonline.cn');`这种写法也是可以的，但不推荐
+>注意`setOption`方法是底层实现设置的方法，若要自定义cUrl底层方法，请弄清楚你要做什么，否则可能导致参数覆盖，例如本例中设置的是请求信息header头中的referer，这种方法是可行的但不推荐！推荐使用`$http->setReferer($referer)`方法，基本上常用的设置方法都已做了封装。
+>例如：需要启用https的严格效验，就可用通过该方法设置`CURLOPT_SSLCERTTYPE`、`CURLOPT_SSL_VERIFYHOST`、`CURLOPT_CAINFO`或`CURLOPT_CAPATH`等值
+>setOption该方法可以多次、链式调用，多次调用设置多个参数值或覆盖
+
+> **设置值时抛出异常请在开发阶段就予以解决，不要试图使用try语句忽略**
+
+
+### 执行http请求
+
+#### 执行get请求
+`$http->get($url);`
+>可选的设置方法调用完毕，最后调用`get`方法执行get请求
+>方法体返回boolean值，true请求执行成功，false请求执行失败，获取请求成功的响应数据或请求失败的失败信息请继续往下看
+
+
+#### 执行post请求
+`$http->get($url,$data);`
+>可选的设置方法调用完毕，最后调用`post`方法执行post请求
+>方法体返回boolean值，true请求执行成功，false请求执行失败，获取请求成功的响应数据或请求失败的失败信息请继续往下看
+
+#### 保存请求成功后的数据，或者称之为：下载远程数据
+`$http->save($local_file_dir);`
+>执行完get或post方法后，可以将执行成功返回的数据保存至本地服务器，`$local_file_dir`指定保存的文件的路径
+>save方法返回Boolean值，true保存文件成功，false保存文件失败、或尚未执行get或post方法、或执行get或post方法失败
+>需要注意的是save方法需要在get或post方法执行之后另行调用，get和post方法不再支持链式调用，例如:
+>`$ret = $http->get($url);`
+>`$ret && $http->save($dir);`
+
+
+### 获取http请求成功后的数据
+
+#### 获取请求成功后返回的包含header头的原始数据
+`$http->getResult();`
+>返回请求成功后http响应原始数据，若未执行或执行失败返回空，不要依据该方法返回空来判断执行成功还是失败
+
+#### 获取请求成功后返回数据的header头
+`$http->getHeader();`
+>返回请求成功后http响应头信息，若未执行或执行失败返回空，不要依据该方法返回空来判断执行成功还是失败
+
+#### 获取请求成功后返回数据的body主体内容
+`$http->getBody();`
+>返回请求成功后http响应的主体内容，譬如：请求某个api后返回的json字符串；若未执行或执行失败返回空，不要依据该方法返回空来判断执行成功还是失败
+
+#### 获取请求成功后返回数据中的cookie键值对数组
+`$http->getResponseCookie();`
+>该方法有个可选参数，取值true或false，默认值false表示返回处理好的cookie键值对二维数组，例如：`[['JID'=>'so7i7srvbk4c5dd0748df8va23'],['token'=>'6a4ee8169908dc4ec0700008fe0c1085']]`，传值true表示返回header头中cookie键值对的原始表示法的一维数组，用于进一步处理获取一些信息，例如：`['JID=so7i7srvbk4c5dd0748df8va23; path=/; domain=.jjonline.cn; HttpOnly','token=6a4ee8169908dc4ec0700008fe0c1085; path=/; domain=.jjonline.cn; HttpOnly']`
+>若未执行或执行失败返回空数组，若请求的响应体中没有cookie也返回空数组，所以不要依据该方法返回空数组来判断执行成功还是失败
+
+
+### 获取http请求失败后的数据
+
+#### 获取请求失败后的错误描述字符串，`curl_error`的返回值
+`$http->getError();`
+>若没有出错将返回空字符串，若出错将返回错误描述字符串，不要依据该方法来判断执行成功还是失败
+
+#### 获取请求失败后的错误号，`curl_errno`的返回值
+`$http->getError();`
+>若没有出错将数字0，若出错将返回不为0的数字，可以依据该方法的返回值`全等于0`判断请求成功，`不全等于0`请求失败
+
+### 获取http请求连接资源句柄的信息数组，`curl_getinfo`的无第二个参数返回值
+`$http->getInfo();`
+>`curl_getinfo`函数的没有第二个参数的返回值

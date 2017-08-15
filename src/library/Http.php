@@ -44,9 +44,9 @@ class Http {
     // curl返回的cookie
     private $responseCookie;
     // curl返回http结果的header头部分
-    private $header;
+    private $header = '';
     // curl返回http结果的body部分
-    private $body;
+    private $body   = '';
     // curl执行后可能的错误信息
     private $error;
     // curl执行后可能的错误号
@@ -54,7 +54,7 @@ class Http {
     // curl_getinfo返回的信息
     private $info;
     // curl返回的带header头的字符串结果
-    private $result;
+    private $result = '';
     private static $instance;
 
     private function __construct() {}
