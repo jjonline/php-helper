@@ -190,7 +190,7 @@ class Http {
     }
 
     /**
-     * 获取返回结果值的cooie
+     * 获取返回结果值的cookie
      * @param  boolean $isOriginCookie 是否获取键值对成字符串的原始cookie
      * @return []
      */
@@ -200,6 +200,7 @@ class Http {
         {
             return $isOriginCookie === false ? $this->responseCookie['parsed'] : $this->responseCookie['origin'];
         }
+        return [];
     }
 
     /**
@@ -310,9 +311,10 @@ class Http {
             $this->setUrl($url);
         }
 
-        // 重置
-        $this->option[CURLOPT_HEADER]  = true;
-        $this->option[CURLOPT_HTTPGET] = true;
+        // 防止setOption方法重置了参数
+        $this->option[CURLOPT_HEADER]         = true;
+        $this->option[CURLOPT_HTTPGET]        = true;
+        $this->option[CURLOPT_RETURNTRANSFER] = true;
         // 可能的待处理的cookie
         $this->_handleRequestCookie();
 
@@ -328,6 +330,8 @@ class Http {
         $this->info   = curl_getinfo($ch);
 
         curl_close($ch);
+
+        var_dump($this->result);
 
         if($this->errno == 0)
         {
@@ -355,10 +359,11 @@ class Http {
             $this->setData($data);
         }
 
-        // 重置
-        $this->option[CURLOPT_HEADER]  = true;
-        $this->option[CURLOPT_HTTPGET] = false;
-        $this->option[CURLOPT_POST]    = true;
+        // 防止setOption方法重置了参数
+        $this->option[CURLOPT_HEADER]         = true;
+        $this->option[CURLOPT_HTTPGET]        = false;
+        $this->option[CURLOPT_POST]           = true;
+        $this->option[CURLOPT_RETURNTRANSFER] = true;
         // 可能的待处理的cookie
         $this->_handleRequestCookie();
 
