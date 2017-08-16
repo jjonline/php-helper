@@ -225,9 +225,8 @@ $http = Http::init();
 
 >需要注意的是save方法需要在get或post方法执行之后另行调用，get和post方法不支持链式调用，所以不要在get或post方法后再链式调用save方法；例如:
 
->`$ret = $http->get($url);`
-
->`$ret && $http->save($dir);`
+    $ret = $http->get($url);
+    $ret && $http->save($dir);
 
 
 ### 获取http请求成功后的数据
@@ -265,7 +264,7 @@ $http = Http::init();
 >`curl_getinfo`函数的没有第二个参数的返回值
 
 
-### sample1 get请求晶晶博客
+### sample1、get请求晶晶博客
 
     uese jjonline\helper\Tools;
     use jjonline\library\Http;
@@ -303,20 +302,19 @@ $http = Http::init();
        echo '请求成功失败，curl_error()返回值为：'.$http->getError().'curl_errno()返回值为：'.$http->getErrno();
     }
 
-### sample2 get请求下载图片
+### sample2、get请求下载图片
 
     use jjonline\library\Http;
     $http      = Http::init();
     $isSuccess = $http->get('http://blog.jjonline.cn/Images/mm.jpg');
-    $isSuccess && $http->('./m.jpg');//此时若不出现异常和错误，脚本所在目录会看到下载的这张图片
+    $isSuccess && $http->save('./m.jpg');//此时若不出现异常和错误，脚本所在目录会看到下载的这张图片
 
 
-### sample3 post请求
+### sample3、post请求
 
     use jjonline\library\Http;
     $http      = Http::init();
-    // 设置过程省略一部分...
-    // 设置post提交的数据
+    // 设置参数和post提交的数据
     $http->setOption(CURLOPT_FILETIME,true)
       ->setReferer('http://blog.jjonline.cn')
       ->setUserAgent('Mozilla/5.0 (Windows NT 6.1; Win64; x64) Chrome/60.0.3112.90 Safari/537.36')
@@ -326,7 +324,7 @@ $http = Http::init();
       ->post('http://blog.jjonline.cn');
     // 接下来的代码省略，当然啦我的博客个人首页对post响应与get无异
 
-### sample4 post上传文件
+### sample4、post上传文件
 
     use jjonline\library\Http;
     $http      = Http::init();
