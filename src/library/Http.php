@@ -38,23 +38,23 @@ class Http {
         CURLOPT_CONNECTTIMEOUT => 10,
     );
     // curl发送的数据
-    private $data;
+    private $data           = [];
     // curl发送的cookie
-    private $requestCookie;
+    private $requestCookie  = [];
     // curl返回的cookie
-    private $responseCookie;
+    private $responseCookie = [];
     // curl返回http结果的header头部分
-    private $header = '';
+    private $header         = '';
     // curl返回http结果的body部分
-    private $body   = '';
+    private $body           = '';
     // curl执行后可能的错误信息
-    private $error;
+    private $error          = '';
     // curl执行后可能的错误号
     private $errno;
     // curl_getinfo返回的信息
     private $info;
     // curl返回的带header头的字符串结果
-    private $result = '';
+    private $result         = '';
     private static $instance;
 
     private function __construct() {}
@@ -69,6 +69,31 @@ class Http {
             self::$instance = new self;
         }
         return self::$instance;
+    }
+
+    /**
+     * 单例对象可重用，但不同请求需要重置配置或数据
+     * @param  boolean $isResetOption 是否重置cUrl的配置项，默认否
+     * @return $this
+     */
+    public function reset($isResetOption = false)
+    {
+        // 重置参数数据和返回结果数据
+        $this->data           = [];
+        $this->requestCookie  = [];
+        $this->responseCookie = [];
+        $this->result         = '';
+        $this->header         = '';
+        $this->body           = '';
+        $this->error          = '';
+        $this->errno          = null;
+        $this->info           = null;
+        // 重置配置参数，此处清除配置将清除本类默认的初始化cUrl参数
+        if($isResetOption)
+        {
+            $this->option     = [];
+        }
+        return $this;
     }
 
     /**
