@@ -328,6 +328,11 @@ $http = Http::init();
       ->setData('postField2','这是post发送的名为postField2的值')
       ->post('http://blog.jjonline.cn');
     // 接下来的代码省略，当然啦我的博客个人首页对post响应与get无异
+    
+    //再来一个post请求，请求之前需要reset掉设置的请求参数
+    $http->reset()
+         ->setData('postData','reset之后原先设置的post请求参数不再生效')
+         ->post('http://blog.jjonline.cn');
 
 ### sample4、post上传文件
 
