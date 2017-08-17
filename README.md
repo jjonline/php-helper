@@ -214,7 +214,7 @@ $http = Http::init();
 
 #### 执行post请求
 `$http->get($url,$data);`
->可选的设置方法调用完毕，最后调用`post`方法执行post请求
+>可选的设置方法调用完毕，最后调用`post`方法执行post请求，两个可选参数，第一个为post的网址，第二个关联二维数组传入本次post提交的键值对数据
 
 >方法体返回boolean值，true请求执行成功，false请求执行失败，获取请求成功的响应数据或请求失败的失败信息请继续往下看
 
@@ -262,6 +262,11 @@ $http = Http::init();
 ### 获取http请求连接资源句柄的信息数组，`curl_getinfo`的无第二个参数返回值
 `$http->getInfo();`
 >`curl_getinfo`函数的没有第二个参数的返回值
+
+
+### 重置http单例
+`$http->reset(false);`
+>一次http请求完毕需要再次请求之前为了防止两次数据乱入，再下一次请求执行之前调用`reset`方法清理掉上一次设置的参数，可选参数表示是否清理掉setOption方法设置的cUrl核心参数，默认值false表示不清理，需要清理传入true
 
 
 ### sample1、get请求晶晶博客
@@ -330,7 +335,7 @@ $http = Http::init();
     $http      = Http::init();
     // 设置过程省略一部分...
     $http->setUploadFile('FileField','../mm.jpg')
-      ->post('http://blog.jjonline.cn');
+         ->post('http://blog.jjonline.cn');
     // 当然，这里post之前依然可以调用setOption、setReferer等之类的方法
     // 这里上传文件后假设被请求的服务器端（也就是接收文件上传方）是PHP开发的
     // 那么可以通过$_FILES['FileField']读取到这个上传的文件
