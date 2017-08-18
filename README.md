@@ -76,35 +76,35 @@ jjonline/php-helper包含两部分：
 
 引入命名空间：`use jjonline\helper\FilterValid`
 
-+ ** boolean FilterValid::is_mail_valid(string $str) **
++ **boolean FilterValid::is_mail_valid(string $str)**
 
   检测传入的字符串是否符合邮箱格式
 
-+ ** boolean FilterValid::is_phone_valid(mixed $str|number) **
++ **boolean FilterValid::is_phone_valid(mixed $str|number)**
 
   检测传入的字符串或数字是否符合天朝手机号格式
 
-+ ** boolean FilterValid::is_url_valid(string $url) **
++ **boolean FilterValid::is_url_valid(string $url)**
 
   检测传入的字符串是否为http或http打头的网址，可包含端口号、get参数和锚点
 
-+ ** boolean FilterValid::is_uid_valid(mixd $uid[[,$min_len = 4],$max_len = 11]) **
++ **boolean FilterValid::is_uid_valid(mixd $uid[[,$min_len = 4],$max_len = 11])**
 
   检测传入的数字是否为一个数字ID，第二个可选参数指定最小长度默认值4；第三个可选参数指定最大长度默认值11
 
-+ ** boolean FilterValid::is_password_valid(string $pwd[,$min_len = 6,$max_len = 18]) **
++ **boolean FilterValid::is_password_valid(string $pwd[,$min_len = 6,$max_len = 18])**
 
   检测传入的字符串是否为同时包含数字和字母的合法密码，第二个可选参数指定最小长度默认值4；第三个可选参数指定最大长度默认值18
 
-+ ** boolean FilterValid::is_chinese_valid(string $str)
++ **boolean FilterValid::is_chinese_valid(string $str)**
 
   检测传入的字符串是否全部为中文汉字
 
-+ ** boolean FilterValid::is_utf8_valid(string $str) **
++ **boolean FilterValid::is_utf8_valid(string $str)**
 
   检测传入的字符串是否utf8编码
 
-+ ** mixd[false|array] FilterValid::is_citizen_id_valid(string $citizen_id) **
++ **mixd[false|array] FilterValid::is_citizen_id_valid(string $citizen_id)**
 
   检测传入的字符串是否为合乎编码规范的天朝身份证号，兼容16位和18位，合乎规范返回数组从身份证号提取信息，否则返回false
 
