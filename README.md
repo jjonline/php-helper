@@ -130,9 +130,11 @@ Html事件属性参考：[HTML事件属性](http://www.w3school.com.cn/tags/html
 
 2.1、Http各方法封装类
 
-    1、基于curl的支持get、post两种常见的http请求方法封装，支持设置header、cookie、Referer、User-Agent、自定义curl参数、下载保存文件以及post上传文件。
-    2、支持链式操作
-
+* 基于curl的支持get、post两种常见的http请求方法封装
+* 自定义设置header、cookie、Referer、User-Agent、自定义curl参数
+* 下载保存文件
+* post上传文件
+* 链式操作
 
 `use jjonline\library\Http;`
 
