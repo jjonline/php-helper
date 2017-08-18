@@ -76,35 +76,35 @@ jjonline/php-helper包含两部分：
 
 引入命名空间：`use jjonline\helper\FilterValid`
 
-+ **boolean FilterValid::is_mail_valid(string $str)**
++ **`boolean FilterValid::is_mail_valid(string $str)`**
 
   检测传入的字符串是否符合邮箱格式
 
-+ **boolean FilterValid::is_phone_valid(mixed $str|number)**
++ **`boolean FilterValid::is_phone_valid(mixed $str|number)`**
 
   检测传入的字符串或数字是否符合天朝手机号格式
 
-+ **boolean FilterValid::is_url_valid(string $url)**
++ **`boolean FilterValid::is_url_valid(string $url)`**
 
   检测传入的字符串是否为http或http打头的网址，可包含端口号、get参数和锚点
 
-+ **boolean FilterValid::is_uid_valid(mixd $uid[[,$min_len = 4],$max_len = 11])**
++ **`boolean FilterValid::is_uid_valid(mixd $uid[[,$min_len = 4],$max_len = 11])`**
 
   检测传入的数字是否为一个数字ID，第二个可选参数指定最小长度默认值4；第三个可选参数指定最大长度默认值11
 
-+ **boolean FilterValid::is_password_valid(string $pwd[,$min_len = 6,$max_len = 18])**
++ **`boolean FilterValid::is_password_valid(string $pwd[,$min_len = 6,$max_len = 18])`**
 
   检测传入的字符串是否为同时包含数字和字母的合法密码，第二个可选参数指定最小长度默认值4；第三个可选参数指定最大长度默认值18
 
-+ **boolean FilterValid::is_chinese_valid(string $str)**
++ **`boolean FilterValid::is_chinese_valid(string $str)`**
 
   检测传入的字符串是否全部为中文汉字
 
-+ **boolean FilterValid::is_utf8_valid(string $str)**
++ **`boolean FilterValid::is_utf8_valid(string $str)`**
 
   检测传入的字符串是否utf8编码
 
-+ **mixd[false|array] FilterValid::is_citizen_id_valid(string $citizen_id)**
++ **`mixd[false|array] FilterValid::is_citizen_id_valid(string $citizen_id)`**
 
   检测传入的字符串是否为合乎编码规范的天朝身份证号，兼容16位和18位，合乎规范返回数组从身份证号提取信息，否则返回false
 
@@ -112,64 +112,64 @@ jjonline/php-helper包含两部分：
 
 引入命名空间：`use jjonline\helper\Tools`
 
-+ **boolean Tools::is_weixin_browser([string $userAgent = null])**
++ **`boolean Tools::is_weixin_browser([string $userAgent = null])`**
 
   检测当前浏览器环境是否为微信浏览器，或者传入浏览器userAgent字符串检测是否为微信浏览器，参数可选
 
-+ **boolean Tools::is_mobile_browser()**
++ **`boolean Tools::is_mobile_browser()`**
 
   检测当前浏览器环境是否为移动端浏览器，当然微信浏览器也会返回true
 
-+ **string Tools::hide_name(string $userName)**
++ **`string Tools::hide_name(string $userName)`**
 
   用户名脱敏处理，字符长度小于3返回3个**\***，长度大于3则返回首尾各1个字符以及中间的3个**\***号字符
 
-+ **string Tools::hide_ipv4(string $ip)**
++ **`string Tools::hide_ipv4(string $ip)`**
 
   IPv4地址脱敏处理，返回IPv4中间两位脱敏后的字符，例如：223.**.**.5
 
-+ **string Tools::nl2p(string $str)**
++ **`string Tools::nl2p(string $str)`**
 
   nl2br的类似函数，只不过是将换行符`\n`、`\r`或`\n\r`转换为成对的`p`标签
 
-+ **string Tools::time_ago(mixed $unixTimeStamp)**
++ **`string Tools::time_ago(mixed $unixTimeStamp)`**
 
   将Unix时间戳转换为`xx前`这种模糊表示法，例如：`刚刚`、`1分钟前`、`2小时前`、`3周前`、`1个月前(07-11)`、`3年前(2014-12-02)` 等
 
-+ **boolean Tools::is_ssl()**
++ **`boolean Tools::is_ssl()`**
 
   检测当前请求是否为https请求
 
-+ **mixed Tools::get_client_ip([$isLong = 0],[$isAdv = false])**
++ **`mixed Tools::get_client_ip([$isLong = 0],[$isAdv = false])`**
 
   获取客户端的IPv4地址，第一个**可选参数**1和true返回IPv4数字表示法，0和false返回IPv4字符串，默认值0；第二个**可选参数**是否检测http代理情况，false不检测，true检测，默认值false
 
-+ **void Tools::redirect(string $url[[,int $time = 0],$text = null])**
++ **`void Tools::redirect(string $url[[,int $time = 0],$text = null])`**
 
   网页重定向，也就是网页跳转啦！第一参数跳转的url，第二个可选参数跳转等待时间，第三个可选参数跳转等待时显示的文本
 
-+ **string|null Tools::dump(string $str[,$echo=true[, $label=null[, $strict=true]]])**
++ **`string|null Tools::dump(string $str[,$echo=true[, $label=null[, $strict=true]]])`**
 
   开发时浏览器友好的调试输出任意变量，来源于ThinkPHP
-    >第二个**可选参数**为false将返回处理好的字符串，为true直接输出没有返回值，默认值为`true`;
-    >第三个**可选参数**指定本次调试的标签，也就是在输出或返回值前加上这个标签值，便于开发调试，默认值`null`；
-    >第四个**可选参数**指定本次输出是否严格模式，也就是在输出或返回值的时候是否将html标签转义，默认值`true`；
+    >第二个**可选参数**为false将返回处理好的字符串，为true直接输出没有返回值，默认值为true;
+    >第三个**可选参数**指定本次调试的标签，也就是在输出或返回值前加上这个标签值，便于开发调试，默认值null；
+    >第四个**可选参数**指定本次输出是否严格模式，也就是在输出或返回值的时候是否将html标签转义，默认值true；
 
-+ **string Tools::transfer_encrypt(string $str[, $key = 'jjonline'[, $expiry = 0]])**
++ **`string Tools::transfer_encrypt(string $str[, $key = 'jjonline'[, $expiry = 0]])`**
 
   来源于discuz的可逆加解密算法，用于有有效期效验的数据交换，加密强度很弱，请甄别使用场景
     >第二个可选参数：本次加密的秘钥，默认加了一个秘钥`jjonline`
     >第三个可选参数：本次加密的有效时间，单位秒，在该参数指定的时间内解密有效
     >其实超过该时间有秘钥也是能解密出明文的，默认值0表示永不失效
 
-+ **string Tools::transfer_decrypt(string $str[, $key = 'jjonline'])**
++ **string Tools::transfer_decrypt(string $str[, $key = 'jjonline'])`**
 
-  将`transfer_encrypt`加密的值解密，并效验有效期，成功返回原串，失败或失效返回空字符串
+  将transfer_encrypt加密的值解密，并效验有效期，成功返回原串，失败或失效返回空字符串
     >第一个参数：待解密的密文
     >第二个参数：解密的秘钥
     >返回值：已失效或解密失败返回空值，解密成功返回明文；警告：过了有效期是可以解出明文的！！！
 
-+ **string Tools::mbsubstr(string $str [,$start = 0[, $length[, $charset = "utf-8"]]])**
++ **`string Tools::mbsubstr(string $str [,$start = 0[, $length[, $charset = "utf-8"]]])`**
 
   返回参数指定的参数截取字符串，参数与原生函数`mb_substr`一致，这是一个兼容处理函数
 
