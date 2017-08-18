@@ -153,6 +153,12 @@ $http = Http::init();
 
 >setTimeOut方法可以链式调用，多次调用后面调用设置的值将覆盖前面调用设置的值
 
+#### 设置/获取http请求体中header头部分的自定义项目
+`$http->setRequestHeader('Content-type','text/plain');` 和 `$http->getRequestHeader('Content-type');`
+>设置http请求时附加在请求体中header头部分的项目内容该方法第二个参数可选，第一个参数可以是二维数组`[['Content-type'=>'text/plain'],['Content-length'=>'1024']]`，用于一次调用设置多个自定义header头
+
+>setRequestHeader方法可以多次、链式调用，多次调用设置多个header头条目
+
 #### 设置/获取请求体header头的Referer
 `$http->setReferer('http://blog.jjonline.cn');` 和 `$http->getReferer();`
 >设置请求的eader头的Referer，Referer是什么就不解释了
@@ -167,8 +173,8 @@ $http = Http::init();
 
 #### 设置/获取Post发送的数据key-value
 `$http->setData('fieldName','fieldValue');` 和 `$http->getData('fieldName');`
->key-vallue形式的二维数组一次设置多个`$http->setData([['fieldName1'=>'fieldValue1'],['fieldName2'=>'fieldValue2']...]);`
->设置请求的header头的User-Agent值，User-Agent值是什么就不解释了；获取已设置的值需要传入获取设置值的fieldName
+>第二个参数为可选参数，当仅适用1个参数时，必须为key-vallue形式的二维数组，这样一次可以设置多个post数据字段`$http->setData([['fieldName1'=>'fieldValue1'],['fieldName2'=>'fieldValue2']...]);`
+>设置Post请求发送的数据体key-value内容
 
 >setData方法可以多次、链式调用，多次调用设置多个Post发送的键值对或覆盖
 
@@ -177,6 +183,7 @@ $http = Http::init();
 `$http->setRequestCookie('cookieName','cookieValue');` 和 `$http->geetRequestCookie('cookieName');`
 >key-vallue形式的二维数组一次设置多个`$http->setData([['cookieName1'=>'cookieValue1'],['cookieName2'=>'cookieValue2']...]);`
 >设置请求的本次请求拟发送的cookie键值对；获取已设置的cookie值需要传入获取拟发送的cookie的名字
+>第二个参数可选，第一个参数可以有多种形式：第一种`[['cookieName'=>'cookieValue'],['cookieName1`'=>'cookieValue1']...]`一次设置多个cookie的二维数组，第二种符合curl_setopt设置cookie参数格式的字符串，例如：`cookieName=cookieValue; cookieName1=cookieValue1; cookie_c=3`这种形式，注意分号和空格。
 
 >setRequestCookie方法可以多次、链式调用，多次调用设置多个cookie键值对或覆盖
 
