@@ -546,6 +546,8 @@ class Http {
         $this->error  = $this->errno ? curl_error($ch) : '';
         $this->info   = curl_getinfo($ch);
 
+        curl_close($ch);
+
         if($this->errno == 0)
         {
             list($this->header, $this->body) = explode("\r\n\r\n", $this->result,2);
