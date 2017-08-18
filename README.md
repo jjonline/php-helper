@@ -106,7 +106,7 @@ jjonline/php-helper包含两部分：
 
 + **`mixd[false|array] FilterValid::is_citizen_id_valid(string $citizen_id)`**
 
-  检测传入的字符串是否为合乎编码规范的天朝身份证号，兼容16位和18位，合乎规范返回数组从身份证号提取信息，否则返回false
+  检测传入的字符串是否为合乎编码规范的天朝身份证号，兼容16位和18位，合乎规范返回数组从身份证号提取信息，否则返回false；16位老号码返回转换后18位号码
 
 ### Tools 常用工具方法静态类
 
@@ -272,7 +272,7 @@ jjonline/php-helper包含两部分：
 
 + **`HttpObject $http->setOption(mixed $key[,mixed $value = null])`**
 
-  高阶自定义设置cUrl原生参数，直接操纵`curl_setopt`函数的设置项，参数比较灵活
+  高阶自定义设置cUrl原生参数，直接操纵`curl_setopt`函数的设置项，参数比较灵活，常量参考：[点此](http://php.net/manual/zh/function.curl-setopt.php)
     ~~~
     第一种传参方式：与curl_setopt(resource $ch , int $option , mixed $value )的第2、3两个参数一致即可
     $http->setRequestCookie(CURLOPT_CRLF,true) //第一个参数为常量
