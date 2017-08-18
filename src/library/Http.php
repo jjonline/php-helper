@@ -247,7 +247,7 @@ class Http {
         } else {
             if ($value === null) {
                 // urlencoded后的字符串形式，例如a=1&b=2&c=3，也就是符合CURLOPT_POSTFIELDS格式要求的字符串
-                parse_str(urldecode($value),$parse_data);
+                parse_str(urldecode($key),$parse_data);
                 if(is_array($parse_data) && $parse_data)
                 {
                     $this->data = array_merge($this->data,$parse_data);
