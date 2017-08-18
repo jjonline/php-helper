@@ -130,16 +130,15 @@ Html事件属性参考：[HTML事件属性](http://www.w3school.com.cn/tags/html
 
 2.1、Http各方法封装类
 
->基于curl的支持get、post两种常见的http请求方法封装，支持设置cookie、Referer、User-Agent、自定义curl参数、下载保存文件以及post上传文件。
->支持链式操作
+    1、基于curl的支持get、post两种常见的http请求方法封装，支持设置header、cookie、Referer、User-Agent、自定义curl参数、下载保存文件以及post上传文件。
+    2、支持链式操作
+
 
 `use jjonline\library\Http;`
 
-
 ### 初始化和设置/获取初始化参数
 
->初始化Http类单例
-$http = Http::init();
+>初始化Http类单例:`$http = Http::init();`
 
 #### 设置/获取请求的url
 `$http->setUrl('http://blog.jjonline.cn');` 和 `$http->getUrl();` 
@@ -264,7 +263,7 @@ $http = Http::init();
 
 #### 获取请求失败后的错误号，`curl_errno`的返回值
 `$http->getErrno();`
->若没有出错将数字0，若出错将返回不为0的数字，可以依据该方法的返回值`全等于0`判断请求成功，`不全等于0`请求失败
+>若没有出错将返回数字0，若出错将返回不为0的数字，可以依据该方法的返回值`全等于0`判断请求成功，`不全等于0`请求失败
 
 ### 获取http请求连接资源句柄的信息数组，`curl_getinfo`的无第二个参数返回值
 `$http->getInfo();`
