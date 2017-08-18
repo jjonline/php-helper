@@ -340,7 +340,7 @@ jjonline/php-helper包含两部分：
   执行get请求，返回布尔值，true执行成功，false执行异常
   >可选参数为快捷设置请求的url，可代替setUrl方法
 
-+ **`boolean $http->post([string $url = null[,array $data = []])`**
++ **`boolean $http->post([string $url = null[,array $data = []]])`**
 
   执行post请求，返回布尔值，true执行成功，false执行异常
   >第一个可选参数为设置请求的url，第二个可选数组参数设置表单数据，格式与setData第二种传参方式一致
@@ -356,3 +356,132 @@ jjonline/php-helper包含两部分：
 
 #### 获取执行请求后的数据
 
++ **`string $http->getResult()`**
+
+  获取请求成功后返回的包含header头的原始数据
+
++ **`string $http->getHeader()`**
+
+  获取请求成功后返回数据的整个header头字符串
+
++ **`string $http->getBody()`**
+
+  获取请求成功后返回数据的body主体内容
+
++ **`array $http->getResponseCookie()`**
+
+  获取请求成功后返回数据中的cookie键值对数组
+  ~~~
+  该方法有个可选参数，取值true或false
+  默认值false表示返回处理好的cookie键值对二维数组
+  例如：[['JID'=>'so7i7srvbk4c5dd0748df8va23'],['token'=>'6a4ee8169908dc4ec0700008fe0c1085']]
+  传值true表示返回header头中cookie键值对的原始表示法的一维数组，用于进一步处理获取一些信息
+  例如：[
+        'JID=so7i7srvbk4c5dd0748df8va23; path=/; domain=.jjonline.cn; HttpOnly',
+        'token=6a4ee8169908dc4ec0700008fe0c1085; path=/; domain=.jjonline.cn; HttpOnly'
+        ]
+  ~~~
+
++ **`string $http->getError()`**
+
+  获取请求失败后的错误描述字符串，`curl_error`的返回值
+
++ **`int $http->getErrno()`**
+
+  获取请求失败后的错误号，`curl_errno`的返回值，没有出错返回数字0，出错返回不为0的数字
+
++ **`array $http->getInfo()`**
+
+  获取http请求连接资源句柄的信息数组，`curl_getinfo`无第二个参数的返回值
+
+#### 重置数据单例复用
+
++ **`HttpObject $http->reset([boolean $isResetOption = false])`**
+
+  一次http请求完毕需要再次请求之前为了防止两次数据乱入，再下一次请求执行之前调用`reset`方法清理掉上一次设置的参数，可选参数表示是否清理掉setOption方法设置的cUrl核心参数，默认值false表示不清理，需要清理传入true，传入true后在再次执行新请求前需重新设置各个参数
+
+#### Http类示例
+
+**sample1、get请求晶晶博客**
+
+~~~
+uese jjonline\helper\Tools;
+use jjonline\library\Http;
+$http = Http::init();
+// [可选的]设置请求时的header头Referer
+$http->setReferer('http://blog.jjonline.cn');
+// [可选的]设置请求时的header头User-Agent值
+$http->setUserAgent('Mozilla/5.0 (Windows NT 6.1; Win64; x64) Chrome/60.0.3112.90 Safari/537.36');
+// [可选的]设置请求时的cookie
+$http->setRequestCookie('JID','so7i7srvbk4c5dd0748df8va23');
+// setData方法在get请求时无效，若需要为get方法传递get变量，请拼接好变量后通过setUrl方法设置
+// 设置请求晶晶的博客首页的Url
+$http->setUrl('http://blog.jjonline.cn');
+// 执行get请求并判断执行状态
+$isSuccess = $http->get();
+/**
+* $http->setUrl('http://blog.jjonline.cn'); 和 $isSuccess = $http->get();也可以简写成
+* $isSuccess = $http->get('http://blog.jjonline.cn');
+*/
+/**
+* 上述的代码也可以这样写：
+* $isSuccess = $http->setReferer('http://blog.jjonline.cn')
+*            ->setUserAgent('Mozilla/5.0 (Windows NT 6.1; Win64; x64) Chrome/60.0.3112.90 Safari/537.36')
+*            ->setRequestCookie('JID','so7i7srvbk4c5dd0748df8va23')
+*            ->setUrl('http://blog.jjonline.cn')
+*            ->get();
+*/
+if($isSuccess)
+{
+   echo '请求成功，header数据为：';
+   Tools::dump($http->getHeader());
+   echo 'body数据为：';
+   Tools::dump($http->getBody());
+}else {
+   echo '请求成功失败，curl_error()返回值为：'.$http->getError().'curl_errno()返回值为：'.$http->getErrno();
+}
+~~~
+
+**sample2、get请求下载图片**
+
+~~~
+use jjonline\library\Http;
+$http      = Http::init();
+$isSuccess = $http->get('http://blog.jjonline.cn/Images/mm.jpg');
+$isSuccess && $http->save('./m.jpg');//此时若不出现异常和错误，脚本所在目录会看到下载的这张图片
+~~~
+
+
+**sample3、post请求**
+
+~~~
+use jjonline\library\Http;
+$http      = Http::init();
+// 设置参数和post提交的数据
+$http->setOption(CURLOPT_FILETIME,true)
+  ->setReferer('http://blog.jjonline.cn')
+  ->setUserAgent('Mozilla/5.0 (Windows NT 6.1; Win64; x64) Chrome/60.0.3112.90 Safari/537.36')
+  ->setRequestCookie('JID','so7i7srvbk4c5dd0748df8va23')
+  ->setData('postField1','这是post发送的名为postField1的值')
+  ->setData('postField2','这是post发送的名为postField2的值')
+  ->post('http://blog.jjonline.cn');
+// 接下来的代码省略，当然啦我的博客个人首页对post响应与get无异
+
+//再来一个post请求，请求之前需要reset掉设置的请求参数
+$http->reset()
+     ->setData('postData','reset之后原先设置的post请求参数不再生效')
+     ->post('http://blog.jjonline.cn');
+~~~
+
+**sample4、post上传文件**
+
+~~~
+use jjonline\library\Http;
+$http      = Http::init();
+// 设置过程省略一部分...
+$http->setUploadFile('FileField','../mm.jpg')
+     ->post('http://blog.jjonline.cn');
+// 当然，这里post之前依然可以调用setOption、setReferer等之类的方法
+// 这里上传文件后假设被请求的服务器端（也就是接收文件上传方）是PHP开发的
+// 那么可以通过$_FILES['FileField']读取到这个上传的文件
+~~~
