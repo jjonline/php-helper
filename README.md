@@ -122,7 +122,7 @@ jjonline/php-helper包含两部分：
 
 + **`string Tools::hide_name(string $userName)`**
 
-  用户名脱敏处理，字符长度小于3返回3个**\***，长度大于3则返回首尾各1个字符以及中间的3个**\***号字符
+  用户名脱敏处理，字符长度小于3返回3个\*，长度大于3则返回首尾各1个字符以及中间的3个\*号字符
 
 + **`string Tools::hide_ipv4(string $ip)`**
 
@@ -195,3 +195,36 @@ jjonline/php-helper包含两部分：
 ----
 
 ### Http 网络请求对象类
+
+引入命名空间：`jjonline\library`
+
+#### 初始化
+
++ **`HttpObject Http::init()`**
+
+  初始化Http单例类，返回对象，例如：`$http = Http::init()`
+
+#### 设置方法
+
++ **`HttpObject $http->setUrl(string $url)`**
+
+  设置请求的网址url
+
++ **`$http->setTimeOut(30)`**
+
+  设置请求连接上之后的超时时间
+
++ **`$http->setRequestHeader($key[,$value = null])`**
+
+  设置自定义请求头信息，参数比较灵活
+  ~~~
+  第一种传参方式：第一个参数为header头的名称部分，第二个参数为header头的值部分
+  $http->setRequestHeader('X-Powered-By','PHP/7.0.22')
+  第二种传参方式：仅第一个参数二维数组，一次可设置多个header头项目
+  $http->setRequestHeader([['X-Powered-By','PHP/7.0.22'],['X-User-By','JJonline']])
+  第三种传参方式：仅第一个参数字符串，完整的header头
+  $http->setRequestHeader('X-Powered-By: PHP/7.0.22')
+  ~~~
+
+
+#### 获取方法
