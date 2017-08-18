@@ -496,6 +496,7 @@ class Http {
         if($this->errno == 0)
         {
             list($this->header, $this->body) = explode("\r\n\r\n", $this->result,2);
+            $this->_handlerResponse();
             $this->_handeleResponseCookie($this->header);
             return true;// 请求成功 通过getXXX的多个方法获得返回的数据
         }
@@ -548,6 +549,7 @@ class Http {
         if($this->errno == 0)
         {
             list($this->header, $this->body) = explode("\r\n\r\n", $this->result,2);
+            $this->_handlerResponse();
             $this->_handeleResponseCookie($this->header);
             return true;
         }
@@ -604,6 +606,18 @@ class Http {
             }
             $cookie                       = implode('; ', $cookie);
             $this->option[CURLOPT_COOKIE] = $cookie;
+        }
+    }
+
+    /**
+     * 修正处理返回结果中的header头中可能包含100和200状态的情况
+     * @return vois
+     */
+    private function _handlerResponse()
+    {
+        if($this->header == 'HTTP/1.1 100 Continue' && stripos($this->body,'HTTP') === 0)
+        {
+            list($this->header, $this->body) = explode("\r\n\r\n", $this->body,2);
         }
     }
 
