@@ -41,23 +41,46 @@ jjonline/php-helper是日常开发过程中积累提炼而来，收集整理了�
 
     // ...
 
-    // 通用http操纵类
-    $Http            = Httpd::init();
-    $Http->setData('postField','postVallue')
-         ->setTimeOut(10)
-         ->setReferer('http://blog.jjonline.cn')
-         ->setUserAgent('Mozilla/5.0')
-         ->setRequestHeader('X-Powered-By','JJonline.Cn')
-         ->setRequestCookie('cookieName','cookieValue')
-         ->post('http://blog.jjonline.cn');
-    if($Http->getErrno === 0)
+    // 通用http操纵类Post方法
+    $Http            = Http::init();
+    $excuteStatus    = $Http->setData('postField','postVallue')
+                            ->setTimeOut(10)
+                            ->setReferer('http://blog.jjonline.cn')
+                            ->setUserAgent('Mozilla/5.0')
+                            ->setRequestHeader('X-Powered-By','JJonline.Cn')
+                            ->setRequestCookie('cookieName','cookieValue')
+                            ->post('http://blog.jjonline.cn');
+    if($excuteStatus)
     {
         $Http->save('/var/www/index.html');
         echo $Http->getBody();
+    }
+
+    // 通用http操纵类Get方法
+    $excuteStatus = $Http->reset()->get('http://blog.jjonline.cn');
+    if($excuteStatus)
+    {
+        $Http->save('/var/www/index1.html');
+        print_r($Http->getResponseCookie());
     }
 ~~~
 
 jjonline/php-helper包含两部分：
 
-* 静态类函数方法
-* 对象类
+* 静态类函数方法：`src/function`目录下
+* 对象类：`src/library`目录下
+
+### FilterValid静态类
+
+引入命名空间：`use jjonline\helper\FilterValid`
+
+* boolean FilterValid::is_mail_valid(string $str)
+* boolean FilterValid::is_phone_valid(mixed $str|number)
+* boolean FilterValid::is_url_valid(string $url)
+* boolean FilterValid::is_uid_valid(mixd $uid[[,$min_len = 4],$max_len = 11])
+* boolean FilterValid::is_password_valid(string $pwd[,$min_len = 6,$max_len = 18])
+* boolean FilterValid::is_chinese_valid(string $str)
+* boolean FilterValid::is_utf8_valid(string $str)
+* mixd[false|array] FilterValid::is_citizen_id_valid(string $citizen_id)
+
+### Tools静态类
