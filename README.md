@@ -202,7 +202,7 @@ jjonline/php-helper包含两部分：
 
 + **`HttpObject Http::init()`**
 
-  初始化Http单例类，返回对象，例如：`$http = Http::init()`
+  初始化Http单例类，返回http单例对象，例如：`$http = Http::init()`
 
 #### 设置方法
 
@@ -210,21 +210,77 @@ jjonline/php-helper包含两部分：
 
   设置请求的网址url
 
-+ **`$http->setTimeOut(30)`**
++ **HttpObject `$http->setTimeOut(int $time)`**
 
-  设置请求连接上之后的超时时间
+  设置请求连接上之后的超时时间，一个int型数字，单位：秒
 
-+ **`$http->setRequestHeader($key[,$value = null])`**
++ **`HttpObject $http->setRequestHeader(mixed $key[,string $value = null])`**
 
   设置自定义请求头信息，参数比较灵活
-  ~~~
-  第一种传参方式：第一个参数为header头的名称部分，第二个参数为header头的值部分
-  $http->setRequestHeader('X-Powered-By','PHP/7.0.22')
-  第二种传参方式：仅第一个参数二维数组，一次可设置多个header头项目
-  $http->setRequestHeader([['X-Powered-By','PHP/7.0.22'],['X-User-By','JJonline']])
-  第三种传参方式：仅第一个参数字符串，完整的header头
-  $http->setRequestHeader('X-Powered-By: PHP/7.0.22')
-  ~~~
+    ~~~
+    第一种传参方式：第一个参数为header头的名称部分，第二个参数为header头的值部分
+    $http->setRequestHeader('X-Powered-By','PHP/7.0.22')
+
+    第二种传参方式：仅第一个参数二维数组，一次可设置多个header头项目
+    $http->setRequestHeader([['X-Powered-By'=>'PHP/7.0.22'],['X-User-By'=>'JJonline']])
+
+    第三种传参方式：仅第一个参数字符串，完整的header头
+    $http->setRequestHeader('X-Powered-By: PHP/7.0.22')
+    ~~~
+
++ **`HttpObject $http->setReferer([string $key = null])`**
+
+  设置请求头信息中的Referer来源，必须是一个合法的网址
+
++ **`HttpObject $http->setUserAgent(string $userAgent)`**
+
+  设置请求头信息中的userAgent浏览器头信息
+
++ **`HttpObject $http->setData(mixed $key[,string $value = null])`**
+
+  设置请求中post发送的fieldKey-fieldValue格式的数据，参数比较灵活
+    ~~~
+    第一种传参方式：第一个参数为post数据的名称部分，第二个参数为post数据的值部分
+    $http->setData('name','Jea')
+    $http->setData('sex','男')
+
+    第二种传参方式：仅第一个参数二维数组，一次可设置多个fieldKey-fieldValue
+    $http->setData([['name'=>'Jea'],['sex'=>'男']])
+
+    第三种传参方式：仅第一个参数字符串，完整的url拼接格式，注意值部分需要urlencode
+    $http->setData('name=Jea&sex=%E7%94%B7')
+    ~~~
+
++ **`HttpObject $http->setRequestCookie(mixed $key[,string $value = null])`**
+
+  设置请求时发送的cookie，参数比较灵活
+    ~~~
+    第一种传参方式：第一个参数为cookie的名称部分，第二个参数为cookie的值部分
+    $http->setRequestCookie('cookieName','cookieValue')
+
+    第二种传参方式：仅第一个参数二维数组，一次可设置多个cookie
+    $http->setRequestCookie([['cookieName1'=>'cookieValue1'],['cookieName2'=>'cookieValue2']])
+
+    第三种传参方式：仅第一个参数字符串，符合curl_setopt原生设置cookie键值对的字符串
+    $http->setRequestCookie('cookie_a=1; cookie_b=2') //注意分号和其后的空格
+    ~~~
+
++ **`HttpObject $http->setUploadFile(string $field_name,string $file_dir)`**
+
+  置Post方法上传的文件
+  第一个参数设置表单名，第二个参数设置拟上传文件路径
+
++ **`HttpObject $http->setOption(mixed $key[,mixed $value = null])`**
+
+  高阶自定义设置cUrl原生参数，直接操纵`curl_setopt`函数的设置项，参数比较灵活
+    ~~~
+    第一种传参方式：与curl_setopt(resource $ch , int $option , mixed $value )的第2、3两个参数一致即可
+    $http->setRequestCookie(CURLOPT_CRLF,true) //第一个参数为常量
+    $http->setRequestCookie('CURLOPT_CRLF',true) //该种方法也是可以的，但不推荐
+
+    第二种传参方式：仅第一个参数二维数组，一次可设置多个
+    $http->setRequestCookie([['CURLOPT_CRLF'=>true],[CURLOPT_FILETIME=>true]])
+    ~~~
 
 
 #### 获取方法
