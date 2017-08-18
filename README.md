@@ -12,6 +12,7 @@ jjonline/php-helper
 
 `composer require jjonline/php-helper`
 
+php-helper是日常开发过程中积累提炼而来，收集整理了基于静态类的多个常用函数方法和通用的对象类，PHP版本要求至少5.4，基于命名空间，适配composer，方便composer一键安装和管理。
 
 2、直接引用自动加载文件
 
