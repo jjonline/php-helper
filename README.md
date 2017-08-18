@@ -10,11 +10,11 @@
 
 `composer require jjonline/php-helper`
 
+> 强烈建议使用composer进行包管理和安装
+
 ### 2、直接引用自动加载文件
 
 `require_once './autoload.php';`
-
-> 强烈建议使用composer进行包管理和安装
 
 
 ## 函数方法(帮助函数类)
