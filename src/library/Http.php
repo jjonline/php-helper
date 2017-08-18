@@ -37,6 +37,8 @@ class Http {
         // 连接超时，建立连接的超时时间，单位秒
         CURLOPT_CONNECTTIMEOUT => 10,
     );
+    //设置进请求header头的key-value数组
+    private $requestHeader  = [];
     // curl发送的数据
     private $data           = [];
     // curl发送的cookie
@@ -79,6 +81,7 @@ class Http {
     public function reset($isResetOption = false)
     {
         // 重置参数数据和返回结果数据
+        $this->requestHeader  = [];
         $this->data           = [];
         $this->requestCookie  = [];
         $this->responseCookie = [];
@@ -185,6 +188,49 @@ class Http {
     }
 
     /**
+     * 设置请求头信息
+     * @param string $key   请求头信息中的名称项，例如：'Content-type'
+     * @param string $value 请求头信息中的值项，例如：'text/plain'
+     * @return $this
+     */
+    public function setRequestHeader($key,$value = null)
+    {
+        if (is_array($key)) {
+            /**
+             * $key是二维数组形式
+             * [[key=>value],[key=>value]...]
+             */
+            $this->requestHeader = array_merge($this->requestHeader,$key);
+        } else {
+            if ($value === null) {
+                // $key传入的是'Content-type: text/plain'这种形式的字符串
+                $_header = explode(':', $key);
+                if(is_array($_header) && coutn($_header) == 2)
+                {
+                    $this->requestHeader[trim($_header[0])] = trim($_header[1]);
+                }
+            } else {
+                $this->requestHeader[$key] = $value;
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * 获取已设置的请求头信息
+     * @param  string $key 设置的请求头名称
+     * @return string
+     */
+    public function getRequestHeader($key = null)
+    {
+        if(!empty($key))
+        {
+            return isset($this->requestHeader[$key]) ? $this->requestHeader[$key] : null;
+        }
+        return $this->requestHeader;
+    }
+
+    /**
      * 设置curl发送的数据
      * @param string|array $key   curl发送数据的key名称或数组包裹的多个key-value或事先已拼接好的数据字符串
      * @param string       $value 第一个参数为string时的value值
@@ -193,6 +239,10 @@ class Http {
     public function setData($key,$value = null)
     {
         if (is_array($key)) {
+            /**
+             * $key是二维数组形式
+             * [[key=>value],[key=>value]...]
+             */
             $this->data = array_merge($this->data,$key);
         } else {
             if ($value === null) {
@@ -233,6 +283,10 @@ class Http {
     public function setRequestCookie($key,$value = null)
     {
         if (is_array($key)) {
+            /**
+             * $key是二维数组形式
+             * [[key=>value],[key=>value]...]
+             */
             $this->requestCookie = array_merge($this->requestCookie,$key);
         } else {
             if ($value === null) {
@@ -418,6 +472,8 @@ class Http {
         $this->option[CURLOPT_HEADER]         = true;
         $this->option[CURLOPT_HTTPGET]        = true;
         $this->option[CURLOPT_RETURNTRANSFER] = true;
+        //处理可能的自定义请求体header
+        $this->_handlerRequestHeader();
         // 可能的待处理的cookie
         $this->_handleRequestCookie();
 
@@ -468,6 +524,8 @@ class Http {
         $this->option[CURLOPT_HTTPGET]        = false;
         $this->option[CURLOPT_POST]           = true;
         $this->option[CURLOPT_RETURNTRANSFER] = true;
+        //处理可能的自定义请求体header
+        $this->_handlerRequestHeader();
         // 可能的待处理的cookie
         $this->_handleRequestCookie();
 
@@ -480,8 +538,6 @@ class Http {
         curl_setopt_array($ch, $this->option);
         // 设置可能的数据
         curl_setopt($ch,CURLOPT_POSTFIELDS,$this->data);
-        // post数据超过1024字节时curl会发送两次请求，第一次会返回100合并至header头
-        curl_setopt($ch,CURLOPT_HTTPHEADER,['Expect:']);
 
         // execute
         $this->result = curl_exec($ch);
@@ -518,6 +574,20 @@ class Http {
         // 自定义set_error_handler可捕获处理，此处暂不使用最简单的file_put_contents方法
         // file_put_contents($local_dir, $this->body);
         return true;
+    }
+
+    /**
+     * 处理发送的header条目
+     * @return void
+     */
+    private function _handlerRequestHeader()
+    {
+        $this->requestHeader['Expect']    = '';
+        $_header = [];
+        foreach ($this->requestHeader as $key => $value) {
+            $_header[]                    = $key.': '.$value;
+        }
+        $this->option[CURLOPT_HTTPHEADER] = $_header;
     }
 
     /**
