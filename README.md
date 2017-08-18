@@ -196,7 +196,7 @@ jjonline/php-helper包含两部分：
 
 ### Http 网络请求对象类
 
-引入命名空间：`jjonline\library`
+引入命名空间：`use jjonline\library\Http`
 
 #### 初始化
 
@@ -238,7 +238,7 @@ jjonline/php-helper包含两部分：
 
 + **`HttpObject $http->setData(mixed $key[,string $value = null])`**
 
-  设置请求中post发送的fieldKey-fieldValue格式的数据，参数比较灵活
+  设置请求中post发送的表单数据，参数比较灵活
     ~~~
     第一种传参方式：第一个参数为post数据的名称部分，第二个参数为post数据的值部分
     $http->setData('name','Jea')
@@ -283,4 +283,76 @@ jjonline/php-helper包含两部分：
     ~~~
 
 
-#### 获取方法
+#### 获取设置的值方法
+
++ **`string $http->getUrl()`**
+
+  获取设置的请求url
+
++ **`int $http->getTimeOut()`**
+
+  获取设置的超时时间
+
++ **`mixed $http->getRequestHeader([string $key = null])`**
+
+  获取设置的header，可选参数为header名称部分
+    ~~~
+    string $http->getRequestHeader('X-Powered-By')
+    array  $http->getRequestHeader() //返回所有设置的header数组格式
+    ~~~
+
++ **`string $http->getReferer()`**
+
+  获取设置的Referer
+
++ **`string $http->getUserAgent()`**
+
+  获取设置的UserAgent
+
++ **`mixed $http->getData([string $key = null])`**
+
+  获取设置的表单数据
+    ~~~
+    string $http->getData('fieldName')
+    array  $http->getData() //返回所有设置的表单数组
+    ~~~
+
++ **`mixed $http->geetRequestCookie([string $key = null])`**
+
+  获取设置的cookie数据
+    ~~~
+    string $http->geetRequestCookie('cookieName')
+    array  $http->geetRequestCookie() //返回所有设置的cookie
+    ~~~
+
++ **`mixed $http->getOption([string $key = null])`**
+
+    获取设置的curl_setopt高阶参数
+    ~~~
+    string $http->getOption(CURLOPT_FILETIME)
+    array  $http->getOption() //返回所有设置的curl_setopt高阶参数
+    ~~~
+
+#### 执行请求和写入数据
+
++ **`boolean $http->get([string $url = null])`**
+
+  执行get请求，返回布尔值，true执行成功，false执行异常
+  >可选参数为快捷设置请求的url，可代替setUrl方法
+
++ **`boolean $http->post([string $url = null[,array $data = []])`**
+
+  执行post请求，返回布尔值，true执行成功，false执行异常
+  >第一个可选参数为设置请求的url，第二个可选数组参数设置表单数据，格式与setData第二种传参方式一致
+
++ **`boolean $http->save(string $local_file_dir)`**
+
+  成功执行get或post后，存储请求到的数据，俗称：下载
+    ~~~
+    参数为保存的路径，包括文件名和后缀，例如
+    $ret = $http->get($url);
+    $ret && $http->save($dir);
+    ~~~
+
+#### 获取执行请求后的数据
+
