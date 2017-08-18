@@ -366,7 +366,7 @@ jjonline/php-helper包含两部分：
 
 + **`string $http->getBody()`**
 
-  获取请求成功后返回数据的body主体内容
+  获取请求成功后返回数据的body主体内容，譬如：请求某个api后返回的json字符串
 
 + **`array $http->getResponseCookie()`**
 
