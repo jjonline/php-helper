@@ -446,7 +446,7 @@ if($isSuccess)
    echo 'body数据为：';
    Tools::dump($http->getBody());
 }else {
-   echo '请求成功失败，curl_error()返回值为：'.$http->getError().'curl_errno()返回值为：'.$http->getErrno();
+   echo '请求失败，curl_error()返回值为：'.$http->getError().'curl_errno()返回值为：'.$http->getErrno();
 }
 ~~~
 
