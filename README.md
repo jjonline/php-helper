@@ -106,7 +106,7 @@ jjonline/php-helper包含两部分：
 
 + **`mixd[false|array] FilterValid::is_citizen_id_valid(string $citizen_id)`**
 
-  检测传入的字符串是否为合乎编码规范的天朝身份证号，兼容16位和18位，合乎规范返回数组从身份证号提取信息，否则返回false；16位老号码返回转换后18位号码
+  检测传入的字符串是否为合乎编码规范的天朝身份证号，兼容16位和18位，合乎规范返回从身份证号提取的出生年月、归属地、性别和身份证号组成的数组，否则返回false；注意传入16位老号码合乎规范的话返回数组中的身份证号将转换为18位！
 
 ### Tools 常用工具方法静态类
 
@@ -126,7 +126,7 @@ jjonline/php-helper包含两部分：
 
 + **`string Tools::hide_ipv4(string $ip)`**
 
-  IPv4地址脱敏处理，返回IPv4中间两位脱敏后的字符，例如：223.**.**.5
+  IPv4地址脱敏处理，返回IPv4中间两位脱敏后的字符，例如：223.\*\*.\*\*.5
 
 + **`string Tools::nl2p(string $str)`**
 
@@ -142,7 +142,7 @@ jjonline/php-helper包含两部分：
 
 + **`mixed Tools::get_client_ip([$isLong = 0],[$isAdv = false])`**
 
-  获取客户端的IPv4地址，第一个**可选参数**1和true返回IPv4数字表示法，0和false返回IPv4字符串，默认值0；第二个**可选参数**是否检测http代理情况，false不检测，true检测，默认值false
+  获取客户端的IPv4地址，第一个可选参数1和true返回IPv4数字表示法，0和false返回IPv4字符串，默认值0；第二个可选参数是否检测http代理情况，false不检测，true检测，默认值false
 
 + **`void Tools::redirect(string $url[[,int $time = 0],$text = null])`**
 
@@ -150,24 +150,30 @@ jjonline/php-helper包含两部分：
 
 + **`string|null Tools::dump(string $str[,$echo=true[, $label=null[, $strict=true]]])`**
 
-  开发时浏览器友好的调试输出任意变量，来源于ThinkPHP
-    >第二个**可选参数**为false将返回处理好的字符串，为true直接输出没有返回值，默认值为true;
-    >第三个**可选参数**指定本次调试的标签，也就是在输出或返回值前加上这个标签值，便于开发调试，默认值null；
-    >第四个**可选参数**指定本次输出是否严格模式，也就是在输出或返回值的时候是否将html标签转义，默认值true；
+  开发时浏览器友好的调试输出任意变量，来源于ThinkPHP，一般调试输出仅需要将调试变量当做第一个参数
+    >第二个可选参数为false将返回处理好的字符串，为true直接输出没有返回值，默认值为true;
+
+    >第三个可选参数指定本次调试的标签，也就是在输出或返回值前加上这个标签值，便于开发调试，默认值null；
+
+    >第四个可选参数指定本次输出是否严格模式，也就是在输出或返回值的时候是否将html标签转义，默认值true；
+
 
 + **`string Tools::transfer_encrypt(string $str[, $key = 'jjonline'[, $expiry = 0]])`**
 
   来源于discuz的可逆加解密算法，用于有有效期效验的数据交换，加密强度很弱，请甄别使用场景
     >第二个可选参数：本次加密的秘钥，默认加了一个秘钥`jjonline`
-    >第三个可选参数：本次加密的有效时间，单位秒，在该参数指定的时间内解密有效
-    >其实超过该时间有秘钥也是能解密出明文的，默认值0表示永不失效
+
+    >第三个可选参数：本次加密的有效时间，单位秒，在该参数指定的时间内解密有效，默认值0表示永不失效
 
 + **string Tools::transfer_decrypt(string $str[, $key = 'jjonline'])`**
 
   将transfer_encrypt加密的值解密，并效验有效期，成功返回原串，失败或失效返回空字符串
     >第一个参数：待解密的密文
+
     >第二个参数：解密的秘钥
-    >返回值：已失效或解密失败返回空值，解密成功返回明文；警告：过了有效期是可以解出明文的！！！
+
+    >返回值：已失效或解密失败返回空值，解密成功返回解密后明文
+  **特别留意：超过过期时间有秘钥也是能解密出明文的，只不过方法体本身效验是否过期，过期就认为解密失败**
 
 + **`string Tools::mbsubstr(string $str [,$start = 0[, $length[, $charset = "utf-8"]]])`**
 
@@ -177,7 +183,9 @@ jjonline/php-helper包含两部分：
 
   获取随机字符串，来源于ThinkPHP
     >第一个**可选参数**指定返回字符串长度，默认值6
+
     >第二个**可选参数**指定返回字符串类型，取值空字符串、0字母、1数字、2大写字母、3小写字母、4中文，默认值空表示返回大小写字母和数字混合的随机字符串，0表示返回大小写字母混合的字符串，以此类推
+
     >第三个**可选参数**指定附加的用于返回值随机字符串的字符元素，函数中的数字、大小写字母去除了易混淆的字母oOLl和数字0和1，若不需要去除通过第三个参数附加进去即可，默认值空字符串
 
 + **`string  Tools::clear_js_code(string $html)`**
@@ -247,7 +255,7 @@ jjonline/php-helper包含两部分：
     第二种传参方式：仅第一个参数二维数组，一次可设置多个fieldKey-fieldValue
     $http->setData([['name'=>'Jea'],['sex'=>'男']])
 
-    第三种传参方式：仅第一个参数字符串，完整的url拼接格式，注意值部分需要urlencode
+    第三种传参方式：仅第一个参数字符串，完整的url拼接格式，注意传值需要urlencode
     $http->setData('name=Jea&sex=%E7%94%B7')
     ~~~
 
