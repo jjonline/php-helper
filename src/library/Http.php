@@ -473,7 +473,7 @@ class Http {
         $this->option[CURLOPT_HTTPGET]        = true;
         $this->option[CURLOPT_RETURNTRANSFER] = true;
         //处理可能的自定义请求体header
-        $this->_handlerRequestHeader();
+        $this->_handleRequestHeader();
         // 可能的待处理的cookie
         $this->_handleRequestCookie();
 
@@ -496,8 +496,8 @@ class Http {
         if($this->errno == 0)
         {
             list($this->header, $this->body) = explode("\r\n\r\n", $this->result,2);
-            $this->_handlerResponse();
-            $this->_handeleResponseCookie($this->header);
+            $this->_handleResponse();
+            $this->_handleResponseCookie($this->header);
             return true;// 请求成功 通过getXXX的多个方法获得返回的数据
         }
         return false;// 请求出现错误，返回false
@@ -526,7 +526,7 @@ class Http {
         $this->option[CURLOPT_POST]           = true;
         $this->option[CURLOPT_RETURNTRANSFER] = true;
         //处理可能的自定义请求体header
-        $this->_handlerRequestHeader();
+        $this->_handleRequestHeader();
         // 可能的待处理的cookie
         $this->_handleRequestCookie();
 
@@ -551,8 +551,8 @@ class Http {
         if($this->errno == 0)
         {
             list($this->header, $this->body) = explode("\r\n\r\n", $this->result,2);
-            $this->_handlerResponse();
-            $this->_handeleResponseCookie($this->header);
+            $this->_handleResponse();
+            $this->_handleResponseCookie($this->header);
             return true;
         }
         return false;//请求出现错误，返回false
@@ -584,7 +584,7 @@ class Http {
      * 处理发送的header条目
      * @return void
      */
-    private function _handlerRequestHeader()
+    private function _handleRequestHeader()
     {
         $this->requestHeader['Expect']    = '';
         $_header = [];
@@ -615,7 +615,7 @@ class Http {
      * 修正处理返回结果中的header头中可能包含100和200状态的情况
      * @return vois
      */
-    private function _handlerResponse()
+    private function _handleResponse()
     {
         if($this->header == 'HTTP/1.1 100 Continue' && stripos($this->body,'HTTP') === 0)
         {
@@ -629,7 +629,7 @@ class Http {
      * @param  string $header http返回结果集的header头
      * @return void
      */
-    private function _handeleResponseCookie($header = '')
+    private function _handleResponseCookie($header = '')
     {
         preg_match_all("/set\-cookie:([^\r\n]*)/i", $header, $matches);
         if(isset($matches[1]))
