@@ -205,7 +205,7 @@ class Http {
             if ($value === null) {
                 // $key传入的是'Content-type: text/plain'这种形式的字符串
                 $_header = explode(':', $key);
-                if(is_array($_header) && coutn($_header) == 2)
+                if(is_array($_header) && count($_header) == 2)
                 {
                     $this->requestHeader[trim($_header[0])] = trim($_header[1]);
                 }
