@@ -605,4 +605,29 @@ class Tools
             return false;
         }
     }
+
+    /**
+     * 生成36位长度的UUID
+     * @param  bool $opt uuid返回值中是否带上大括号，默认false不带
+     * @return string
+     */
+    public static function generate_uuid($opt = false)
+    {
+        // 获取服务器IP作为uuid一个变量因子
+        $server_ip   = isset($_SERVER['HTTP_X_FORWARDED_HOST']) ? $_SERVER['HTTP_X_FORWARDED_HOST'] : (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '');
+        // PHP7.1下可使用内置生成session_id唯一性相当好的方法生成一个session_id使用
+        $session_id  = function_exists('session_create_id') ? session_create_id() : uniqid($server_ip.mt_rand());
+        $charid      = md5(uniqid($session_id.mt_rand().$server_ip, true));
+        $hyphen      = chr(45); // "-"
+        $left_curly  = $opt ? chr(123) : ""; //  "{"
+        $right_curly = $opt ? chr(125) : ""; //  "}"
+        $uuid        = $left_curly
+                     . substr($charid, 0, 8) . $hyphen
+                     . substr($charid, 8, 4) . $hyphen
+                     . substr($charid, 12, 4) . $hyphen
+                     . substr($charid, 16, 4) . $hyphen
+                     . substr($charid, 20, 12)
+                     . $right_curly;
+        return $uuid;
+    }
 }
