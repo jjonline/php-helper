@@ -173,6 +173,7 @@ jjonline/php-helper包含两部分：
     >第二个参数：解密的秘钥
 
     >返回值：已失效或解密失败返回空值，解密成功返回解密后明文
+
   **特别留意：超过过期时间有秘钥也是能解密出明文的，只不过方法体本身效验是否过期，过期就认为解密失败**
 
 + **`string Tools::mbsubstr(string $str [,$start = 0[, $length[, $charset = "utf-8"]]])`**
@@ -195,10 +196,17 @@ jjonline/php-helper包含两部分：
 + **`string to_absolute_url(string $sUrl,string $baseUrl)`**
 
   将当前网页中的相对超链接转换为带域名的完整超链接
+    >第一个参数指定当前网页中的相对网址链接，例如：`./../../article/news/1.html`
+    >第而个参数指定当前网页的网址Url，例如：`http://blog.jjonline.cn/a/html/top/idea.html`
 
 + **`boolean Tools::rm_dir(string $dir)`**
 
   删除目录以及目录下的所有文件，原生函数`rmdir`只能删除非空目录
+
++ **`boolean Tools::generate_uuid([$opt = false])`**
+
+  生成唯一性相当棒的uuid，例如：`32EC26AB-70CD-B80D-FB72-ABD8B5CC9AA8`
+    >可选参数传值true或false，默认值false，表示返回的uuid不包裹大括号，传值true则返回包裹大括号的uuid，例如:`{32EC26AB-70CD-B80D-FB72-ABD8B5CC9AA8}`
 
 ----
 
