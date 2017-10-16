@@ -197,7 +197,8 @@ jjonline/php-helper包含两部分：
 
   将当前网页中的相对超链接转换为带域名的完整超链接
     >第一个参数指定当前网页中的相对网址链接，例如：`./../../article/news/1.html`
-    >第而个参数指定当前网页的网址Url，例如：`http://blog.jjonline.cn/a/html/top/idea.html`
+
+    >第二个参数指定当前网页的网址Url，例如：`http://blog.jjonline.cn/a/html/top/idea.html`
 
 + **`boolean Tools::rm_dir(string $dir)`**
 
@@ -206,7 +207,7 @@ jjonline/php-helper包含两部分：
 + **`boolean Tools::generate_uuid([$opt = false])`**
 
   生成唯一性相当棒的uuid，例如：`32EC26AB-70CD-B80D-FB72-ABD8B5CC9AA8`
-    >可选参数传值true或false，默认值false，表示返回的uuid不包裹大括号，传值true则返回包裹大括号的uuid，例如:`{32EC26AB-70CD-B80D-FB72-ABD8B5CC9AA8}`
+    >可选参数传值`true`或`false`，默认值`false`，表示返回的uuid不包裹大括号，传值`true`则返回包裹大括号的uuid，例如:`{32EC26AB-70CD-B80D-FB72-ABD8B5CC9AA8}`
 
 ----
 
