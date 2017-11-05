@@ -9,12 +9,12 @@ jjonline/php-helper是日常开发过程中积累提炼而来，收集整理了�
 
 ## 安装
 
-1、composer安装
+方法1、composer安装后使用composer的自动加载器
 
 `composer require jjonline/php-helper`
 
 
-2、直接引用自动加载文件
+方法2、下载代码包后直接使用包提供的自动加载器
 
 `require_once './autoload.php';`
 
