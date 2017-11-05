@@ -468,6 +468,13 @@ class Http {
             $this->setUrl($url);
         }
 
+        // 检查url是否设置
+        if(!empty($this->url))
+        {
+            throw new Exception('Target URL is invalid.', 500);
+        }
+        $url = $this->url;
+
         // 防止setOption方法重置了参数
         $this->option[CURLOPT_HEADER]         = true;
         $this->option[CURLOPT_HTTPGET]        = true;
@@ -519,6 +526,13 @@ class Http {
         {
             $this->setData($data);
         }
+
+        // 检查url是否设置
+        if(!empty($this->url))
+        {
+            throw new Exception('Target URL is invalid.', 500);
+        }
+        $url = $this->url;
 
         // 防止setOption方法重置了参数
         $this->option[CURLOPT_HEADER]         = true;
