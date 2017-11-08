@@ -1,6 +1,6 @@
 {
     "name": "jjonline/php-helper",
-    "description": "整理的日常编码中常用的函数和类",
+    "description": "常用的函数和类",
     "keywords": ["function","class","library"],
     "homepage": "https://github.com/jjonline/php-helper",
     "type": "library",
