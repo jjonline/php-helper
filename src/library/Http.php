@@ -363,9 +363,9 @@ class Http {
 
     /**
      * 设置cUrl请求连接的超时时间|默认值30秒
-     * @param int $time 设置的超时时间，单位：秒
+     * @param int $timeout 设置的超时时间，单位：秒
      */
-    public function setTimeOut($time)
+    public function setTimeOut($timeout)
     {
         $this->timeout = intval($timeout);
         return $this;
