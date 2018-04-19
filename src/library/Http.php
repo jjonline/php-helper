@@ -469,7 +469,7 @@ class Http {
         }
 
         // 检查url是否设置
-        if(!empty($this->url))
+        if(empty($this->url))
         {
             throw new Exception('Target URL is invalid.', 500);
         }
@@ -528,7 +528,7 @@ class Http {
         }
 
         // 检查url是否设置
-        if(!empty($this->url))
+        if(empty($this->url))
         {
             throw new Exception('Target URL is invalid.', 500);
         }
